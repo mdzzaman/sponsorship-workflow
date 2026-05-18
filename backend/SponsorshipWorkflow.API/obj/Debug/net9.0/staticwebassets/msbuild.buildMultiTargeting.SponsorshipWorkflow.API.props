@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/SponsorshipWorkflow.API.props" />
+</Project>

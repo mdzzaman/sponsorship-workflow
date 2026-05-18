@@ -1,0 +1,15 @@
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/obj/Debug/net9.0/SponsorshipWorkflow.Application.csproj.AssemblyReference.cache
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/obj/Debug/net9.0/SponsorshipWorkflow.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/obj/Debug/net9.0/SponsorshipWorkflow.Application.AssemblyInfoInputs.cache
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/obj/Debug/net9.0/SponsorshipWorkflow.Application.AssemblyInfo.cs
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/obj/Debug/net9.0/SponsorshipWorkflow.Application.csproj.CoreCompileInputs.cache
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/bin/Debug/net9.0/SponsorshipWorkflow.Application.deps.json
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/bin/Debug/net9.0/SponsorshipWorkflow.Application.dll
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/bin/Debug/net9.0/SponsorshipWorkflow.Application.pdb
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/bin/Debug/net9.0/SponsorshipWorkflow.Domain.dll
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/bin/Debug/net9.0/SponsorshipWorkflow.Domain.pdb
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/obj/Debug/net9.0/Sponsors.A8EF00C7.Up2Date
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/obj/Debug/net9.0/SponsorshipWorkflow.Application.dll
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/obj/Debug/net9.0/refint/SponsorshipWorkflow.Application.dll
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/obj/Debug/net9.0/SponsorshipWorkflow.Application.pdb
+/Users/mdkamruzzaman/Work/my/repo-bit/assessment/sponsorship-workflow/backend/SponsorshipWorkflow.Application/obj/Debug/net9.0/ref/SponsorshipWorkflow.Application.dll
