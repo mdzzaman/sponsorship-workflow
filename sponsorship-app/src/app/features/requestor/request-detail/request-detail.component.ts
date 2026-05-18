@@ -12,10 +12,9 @@ import { SponsorshipService } from '../../../core/services/sponsorship.service';
 import { SponsorshipRequestDto } from '../../../core/models/sponsorship.model';
 
 @Component({
-  selector: 'app-request-detail',
-  standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule, MatTableModule, ShellComponent, StatusBadgeComponent],
-  template: `
+    selector: 'app-request-detail',
+    imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule, MatTableModule, ShellComponent, StatusBadgeComponent],
+    template: `
     <app-shell [navItems]="navItems">
       <div *ngIf="request">
         <div class="page-header">
@@ -53,7 +52,7 @@ import { SponsorshipRequestDto } from '../../../core/models/sponsorship.model';
       </div>
     </app-shell>
   `,
-  styles: [`
+    styles: [`
     .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
     .detail-card{max-width:900px;}
     .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}

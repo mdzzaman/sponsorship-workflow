@@ -14,14 +14,13 @@ import { SponsorshipService } from '../../../core/services/sponsorship.service';
 import { SponsorshipRequestDto, RequestStatus } from '../../../core/models/sponsorship.model';
 
 @Component({
-  selector: 'app-requestor-dashboard',
-  standalone: true,
-  imports: [
-    CommonModule, MatTableModule, MatButtonModule, MatIconModule, MatCardModule,
-    MatSnackBarModule, MatTooltipModule, MatDialogModule,
-    ShellComponent, StatusBadgeComponent
-  ],
-  template: `
+    selector: 'app-requestor-dashboard',
+    imports: [
+        CommonModule, MatTableModule, MatButtonModule, MatIconModule, MatCardModule,
+        MatSnackBarModule, MatTooltipModule, MatDialogModule,
+        ShellComponent, StatusBadgeComponent
+    ],
+    template: `
     <app-shell [navItems]="navItems">
       <div class="page-header">
         <h2>My Requests</h2>
@@ -67,7 +66,7 @@ import { SponsorshipRequestDto, RequestStatus } from '../../../core/models/spons
       </mat-card>
     </app-shell>
   `,
-  styles: [`.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;} .full-width{width:100%;} .empty{padding:24px;text-align:center;color:#999;}`]
+    styles: [`.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;} .full-width{width:100%;} .empty{padding:24px;text-align:center;color:#999;}`]
 })
 export class RequestorDashboardComponent implements OnInit {
   requests: SponsorshipRequestDto[] = [];

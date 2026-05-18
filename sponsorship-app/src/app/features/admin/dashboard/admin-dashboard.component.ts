@@ -18,14 +18,13 @@ import { SponsorshipService } from '../../../core/services/sponsorship.service';
 import { SponsorshipRequestDto, SponsorshipTypeDto } from '../../../core/models/sponsorship.model';
 
 @Component({
-  selector: 'app-admin-dashboard',
-  standalone: true,
-  imports: [
-    CommonModule, ReactiveFormsModule, MatTableModule, MatButtonModule, MatIconModule,
-    MatCardModule, MatTabsModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule,
-    MatSnackBarModule, MatTooltipModule, ShellComponent, StatusBadgeComponent
-  ],
-  template: `
+    selector: 'app-admin-dashboard',
+    imports: [
+        CommonModule, ReactiveFormsModule, MatTableModule, MatButtonModule, MatIconModule,
+        MatCardModule, MatTabsModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule,
+        MatSnackBarModule, MatTooltipModule, ShellComponent, StatusBadgeComponent
+    ],
+    template: `
     <app-shell [navItems]="navItems">
       <mat-tab-group>
         <mat-tab label="All Requests">
@@ -79,7 +78,7 @@ import { SponsorshipRequestDto, SponsorshipTypeDto } from '../../../core/models/
       </mat-tab-group>
     </app-shell>
   `,
-  styles: [`.full-width{width:100%} .empty{padding:24px;text-align:center;color:#999}`]
+    styles: [`.full-width{width:100%} .empty{padding:24px;text-align:center;color:#999}`]
 })
 export class AdminDashboardComponent implements OnInit {
   private svc = inject(SponsorshipService);

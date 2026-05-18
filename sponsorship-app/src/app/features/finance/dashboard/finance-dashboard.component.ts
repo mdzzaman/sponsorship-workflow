@@ -15,13 +15,12 @@ import { SponsorshipService } from '../../../core/services/sponsorship.service';
 import { SponsorshipRequestDto } from '../../../core/models/sponsorship.model';
 
 @Component({
-  selector: 'app-finance-dashboard',
-  standalone: true,
-  imports: [
-    CommonModule, MatTableModule, MatButtonModule, MatIconModule, MatCardModule,
-    MatDialogModule, MatSnackBarModule, MatTooltipModule, ShellComponent, StatusBadgeComponent
-  ],
-  template: `
+    selector: 'app-finance-dashboard',
+    imports: [
+        CommonModule, MatTableModule, MatButtonModule, MatIconModule, MatCardModule,
+        MatDialogModule, MatSnackBarModule, MatTooltipModule, ShellComponent, StatusBadgeComponent
+    ],
+    template: `
     <app-shell [navItems]="navItems">
       <h2>Finance Review Queue</h2>
       <mat-card>
@@ -46,7 +45,7 @@ import { SponsorshipRequestDto } from '../../../core/models/sponsorship.model';
       </mat-card>
     </app-shell>
   `,
-  styles: [`.full-width{width:100%} .empty{padding:24px;text-align:center;color:#999}`]
+    styles: [`.full-width{width:100%} .empty{padding:24px;text-align:center;color:#999}`]
 })
 export class FinanceDashboardComponent implements OnInit {
   requests: SponsorshipRequestDto[] = [];

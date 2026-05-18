@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { RequestStatus, StatusLabels } from '../../core/models/sponsorship.model';
 
 @Component({
-  selector: 'app-status-badge',
-  standalone: true,
-  imports: [CommonModule],
-  template: `<span class="badge" [ngClass]="cssClass">{{label}}</span>`,
-  styles: [`
+    selector: 'app-status-badge',
+    imports: [CommonModule],
+    template: `<span class="badge" [ngClass]="cssClass">{{label}}</span>`,
+    styles: [`
     .badge { padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600; white-space:nowrap; }
     .draft     { background:#e0e0e0; color:#616161; }
     .pending   { background:#fff3e0; color:#e65100; }

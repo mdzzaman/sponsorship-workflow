@@ -15,14 +15,13 @@ import { SponsorshipService } from '../../../core/services/sponsorship.service';
 import { SponsorshipTypeDto } from '../../../core/models/sponsorship.model';
 
 @Component({
-  selector: 'app-request-form',
-  standalone: true,
-  imports: [
-    CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule,
-    MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule,
-    MatCardModule, MatSnackBarModule, MatProgressSpinnerModule
-  ],
-  template: `
+    selector: 'app-request-form',
+    imports: [
+        CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule,
+        MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule,
+        MatCardModule, MatSnackBarModule, MatProgressSpinnerModule
+    ],
+    template: `
     <mat-card>
       <mat-card-header>
         <mat-card-title>{{isEdit ? 'Edit' : 'New'}} Sponsorship Request</mat-card-title>
@@ -85,7 +84,7 @@ import { SponsorshipTypeDto } from '../../../core/models/sponsorship.model';
       </mat-card-actions>
     </mat-card>
   `,
-  styles: [`
+    styles: [`
     mat-card { max-width:900px; margin:0 auto; }
     .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
     .full-span { grid-column:1/-1; }

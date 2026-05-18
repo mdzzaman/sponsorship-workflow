@@ -11,10 +11,9 @@ import { AuthService } from '../../core/services/auth.service';
 export interface NavItem { label: string; route: string; icon: string; }
 
 @Component({
-  selector: 'app-shell',
-  standalone: true,
-  imports: [CommonModule, RouterModule, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule],
-  template: `
+    selector: 'app-shell',
+    imports: [CommonModule, RouterModule, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule],
+    template: `
     <mat-sidenav-container class="shell-container">
       <mat-sidenav mode="side" opened class="sidenav">
         <div class="sidenav-header">
@@ -45,7 +44,7 @@ export interface NavItem { label: string; route: string; icon: string; }
       </mat-sidenav-content>
     </mat-sidenav-container>
   `,
-  styles: [`
+    styles: [`
     .shell-container { height:100vh; }
     .sidenav { width:220px; background:#1a237e; color:white; display:flex; flex-direction:column; }
     .sidenav-header { padding:24px 16px; display:flex; gap:12px; align-items:center; font-size:14px; font-weight:600; border-bottom:1px solid rgba(255,255,255,0.1); }
