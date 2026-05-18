@@ -1,0 +1,85 @@
+# ==========================================
+# .gitignore - Sponsorship Workflow Project
+# ==========================================
+
+# ------------------------------------------
+# Operating System Files
+# ------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ------------------------------------------
+# Build & Output Directories (.NET)
+# ------------------------------------------
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Ww]in32/
+[Aa]rm/
+[Aa]rm64/
+x64/
+x86/
+bld/
+[Log]/
+[Logs]/
+[Tt]est[Rr]esults/
+
+# ------------------------------------------
+# IDE & Editor Settings
+# ------------------------------------------
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.suo.tmp
+
+# JetBrains (Rider, WebStorm, etc.)
+.idea/
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# ------------------------------------------
+# Frontend & Node Dependencies (Angular/React)
+# ------------------------------------------
+node_modules/
+.angular/
+dist/
+tmp/
+out-tsc/
+bazel-out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ------------------------------------------
+# Local Environment & Secrets
+# ------------------------------------------
+.env
+.env.local
+.env.*.local
+*.secret
+*.secrets
+appsettings.local.json
+appsettings.Development.local.json
+
+# ------------------------------------------
+# Docker & Containers
+# ------------------------------------------
+.docker-compose.override.yml
+docker-compose.override.yml
