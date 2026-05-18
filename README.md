@@ -73,12 +73,12 @@ docker-compose up --build
 # - Run EF Core migrations automatically
 # - Seed all test accounts and sponsorship types
 # - Serve Angular at http://localhost:80
-# - Serve API at http://localhost:5000
+# - Serve API at http://localhost:5001
 ```
 
 **Access points:**
 - Frontend: http://localhost
-- API Swagger: http://localhost:5000/swagger
+- API Swagger: http://localhost:5001/swagger
 - Database (if needed): localhost:5432
 
 ---
@@ -101,8 +101,8 @@ cd backend
 # 2. Run migrations + start API
 dotnet run --project SponsorshipWorkflow.API
 
-# API runs on http://localhost:5000
-# Swagger: http://localhost:5000/swagger
+# API runs on http://localhost:5001
+# Swagger: http://localhost:5001/swagger
 # Migrations run automatically on startup
 # Test accounts are seeded automatically
 ```
