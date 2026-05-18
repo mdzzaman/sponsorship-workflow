@@ -5,6 +5,3 @@ namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
 
 public record ApproveByFinanceCommand(Guid RequestId, string FinanceId, string FinanceName, string? Remarks)
     : IRequest<Result>;
-
-public record RejectByFinanceCommand(Guid RequestId, string FinanceId, string FinanceName, string Remarks)
-    : IRequest<Result>;

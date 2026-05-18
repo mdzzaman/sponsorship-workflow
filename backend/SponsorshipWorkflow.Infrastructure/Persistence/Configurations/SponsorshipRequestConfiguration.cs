@@ -29,6 +29,8 @@ public class SponsorshipRequestConfiguration : IEntityTypeConfiguration<Sponsors
             .HasForeignKey(h => h.RequestId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.Property(r => r.RowVersion).IsRowVersion();
+
         builder.Ignore(r => r.DomainEvents);
     }
 }

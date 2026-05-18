@@ -1,12 +1,13 @@
 using MediatR;
 using SponsorshipWorkflow.Application.Common;
 using SponsorshipWorkflow.Application.DTOs;
-using SponsorshipWorkflow.Application.Interfaces;
+using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
+using SponsorshipWorkflow.Application.Interfaces;
 using SponsorshipWorkflow.Domain.Entities;
 using SponsorshipWorkflow.Domain.Enums;
 
-namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
+namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.CommandHandlers;
 
 public class CreateRequestCommandHandler(IApplicationDbContext db)
     : IRequestHandler<CreateRequestCommand, Result<SponsorshipRequestDto>>

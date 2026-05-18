@@ -3,5 +3,5 @@ using SponsorshipWorkflow.Application.Common;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
 
-public record CancelRequestCommand(Guid RequestId, string RequestorId, string RequestorName)
+public record RejectByManagerCommand(Guid RequestId, string ManagerId, string ManagerName, string Remarks)
     : IRequest<Result>;

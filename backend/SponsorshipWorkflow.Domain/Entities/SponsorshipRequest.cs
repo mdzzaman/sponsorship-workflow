@@ -19,6 +19,9 @@ public class SponsorshipRequest : BaseEntity
     public string? Remarks { get; set; }
     public RequestStatus Status { get; set; } = RequestStatus.Draft;
 
+    // Optimistic concurrency — EF uses this to detect concurrent modifications
+    public byte[] RowVersion { get; set; } = [];
+
     public SponsorshipType SponsorshipType { get; set; } = null!;
     public ICollection<WorkflowHistory> WorkflowHistories { get; set; } = new List<WorkflowHistory>();
 
