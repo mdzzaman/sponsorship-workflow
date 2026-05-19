@@ -41,4 +41,4 @@ databases:
   - name: sponsorship-db
     plan: free
     databaseName: sponsorship_db
-    user: postgres
+    user: sponsorship_user
