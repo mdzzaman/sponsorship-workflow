@@ -1,11 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SponsorshipWorkflow.Application.Common;
+using SponsorshipWorkflow.Domain.Common;
 using SponsorshipWorkflow.Application.DTOs;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
 using SponsorshipWorkflow.Application.Interfaces;
-using SponsorshipWorkflow.Domain.Enums;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.CommandHandlers;
 
@@ -19,27 +18,26 @@ public class UpdateRequestCommandHandler(IApplicationDbContext db)
             .FirstOrDefaultAsync(r => r.Id == request.RequestId, cancellationToken);
 
         if (entity == null) return Result<SponsorshipRequestDto>.Failure("Request not found.");
-        if (entity.RequestorId != request.RequestorId)
-            return Result<SponsorshipRequestDto>.Failure("You can only edit your own requests.");
-        if (entity.Status != RequestStatus.Draft)
-            return Result<SponsorshipRequestDto>.Failure("Only draft requests can be edited.");
 
         var typeExists = await db.SponsorshipTypes.FindAsync([request.SponsorshipTypeId], cancellationToken);
         if (typeExists == null || !typeExists.IsActive)
             return Result<SponsorshipRequestDto>.Failure("Invalid sponsorship type.");
 
-        entity.Title = request.Title;
-        entity.Department = request.Department;
-        entity.SponsorshipTypeId = request.SponsorshipTypeId;
-        entity.EventName = request.EventName;
-        entity.EventDate = request.EventDate;
-        entity.RequestedAmount = request.RequestedAmount;
-        entity.Justification = request.Justification;
-        entity.ExpectedBenefit = request.ExpectedBenefit;
-        entity.Remarks = request.Remarks;
-        entity.UpdatedAt = DateTime.UtcNow;
+        var result = entity.Update(request.RequestorId, request.Title, request.Department,
+            request.SponsorshipTypeId, request.EventName, request.EventDate,
+            request.RequestedAmount, request.Justification, request.ExpectedBenefit, request.Remarks);
 
-        await db.SaveChangesAsync(cancellationToken);
+        if (!result.IsSuccess) return Result<SponsorshipRequestDto>.Failure(result.Error!);
+
+        try
+        {
+            await db.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return Result<SponsorshipRequestDto>.Failure("This request was modified by another user. Please refresh and try again.");
+        }
+
         return Result<SponsorshipRequestDto>.Success(entity.ToDto());
     }
 }

@@ -1,4 +1,4 @@
-namespace SponsorshipWorkflow.Application.Common;
+namespace SponsorshipWorkflow.Domain.Common;
 
 public class Result<T>
 {

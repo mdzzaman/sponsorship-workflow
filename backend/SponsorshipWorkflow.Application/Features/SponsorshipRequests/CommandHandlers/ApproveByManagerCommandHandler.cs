@@ -1,9 +1,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SponsorshipWorkflow.Application.Common;
+using SponsorshipWorkflow.Domain.Common;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
 using SponsorshipWorkflow.Application.Interfaces;
-using SponsorshipWorkflow.Domain.Enums;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.CommandHandlers;
 
@@ -16,10 +15,10 @@ public class ApproveByManagerCommandHandler(IApplicationDbContext db)
             .FirstOrDefaultAsync(r => r.Id == request.RequestId, cancellationToken);
 
         if (entity == null) return Result.Failure("Request not found.");
-        if (entity.Status != RequestStatus.PendingManagerApproval)
-            return Result.Failure("Request is not pending manager approval.");
 
-        entity.ChangeStatus(RequestStatus.PendingFinanceReview, request.ManagerId, request.ManagerName, request.Remarks);
+        var result = entity.ApproveByManager(request.ManagerId, request.ManagerName, request.Remarks);
+        if (!result.IsSuccess) return result;
+
         db.WorkflowHistories.Add(WorkflowHistoryFactory.FromLastEvent(entity));
         entity.ClearDomainEvents();
 

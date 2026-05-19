@@ -1,5 +1,6 @@
 using MediatR;
-using SponsorshipWorkflow.Application.Common;
+using Microsoft.EntityFrameworkCore;
+using SponsorshipWorkflow.Domain.Common;
 using SponsorshipWorkflow.Application.DTOs;
 using SponsorshipWorkflow.Application.Features.SponsorshipTypes.Commands;
 using SponsorshipWorkflow.Application.Interfaces;
@@ -14,11 +15,17 @@ public class UpdateSponsorshipTypeCommandHandler(IApplicationDbContext db)
         var entity = await db.SponsorshipTypes.FindAsync([request.Id], cancellationToken);
         if (entity == null) return Result<SponsorshipTypeDto>.Failure("Sponsorship type not found.");
 
-        entity.Name = request.Name;
-        entity.IsActive = request.IsActive;
-        entity.UpdatedAt = DateTime.UtcNow;
+        entity.Update(request.Name, request.IsActive);
 
-        await db.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await db.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return Result<SponsorshipTypeDto>.Failure("This sponsorship type was modified by another user. Please refresh and try again.");
+        }
+
         return Result<SponsorshipTypeDto>.Success(new SponsorshipTypeDto { Id = entity.Id, Name = entity.Name, IsActive = entity.IsActive });
     }
 }

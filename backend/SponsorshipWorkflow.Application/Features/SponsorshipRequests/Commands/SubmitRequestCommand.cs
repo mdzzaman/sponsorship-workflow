@@ -1,5 +1,5 @@
 using MediatR;
-using SponsorshipWorkflow.Application.Common;
+using SponsorshipWorkflow.Domain.Common;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
 

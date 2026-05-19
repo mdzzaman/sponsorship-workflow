@@ -1,9 +1,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SponsorshipWorkflow.Application.Common;
+using SponsorshipWorkflow.Domain.Common;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
 using SponsorshipWorkflow.Application.Interfaces;
-using SponsorshipWorkflow.Domain.Enums;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.CommandHandlers;
 
@@ -16,10 +15,10 @@ public class SubmitRequestCommandHandler(IApplicationDbContext db)
             .FirstOrDefaultAsync(r => r.Id == request.RequestId, cancellationToken);
 
         if (entity == null) return Result.Failure("Request not found.");
-        if (entity.RequestorId != request.RequestorId) return Result.Failure("You can only submit your own requests.");
-        if (entity.Status != RequestStatus.Draft) return Result.Failure("Only draft requests can be submitted.");
 
-        entity.ChangeStatus(RequestStatus.PendingManagerApproval, request.RequestorId, request.RequestorName, "Submitted for approval");
+        var result = entity.Submit(request.RequestorId, request.RequestorName);
+        if (!result.IsSuccess) return result;
+
         db.WorkflowHistories.Add(WorkflowHistoryFactory.FromLastEvent(entity));
         entity.ClearDomainEvents();
 

@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SponsorshipWorkflow.Application.Common;
+using SponsorshipWorkflow.Domain.Common;
 using SponsorshipWorkflow.Application.DTOs;
 using SponsorshipWorkflow.Application.Features.SponsorshipTypes.Commands;
 using SponsorshipWorkflow.Application.Interfaces;

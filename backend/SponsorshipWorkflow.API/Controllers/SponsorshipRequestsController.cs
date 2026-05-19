@@ -103,11 +103,8 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
     [Authorize(Roles = UserRole.Manager)]
     public async Task<IActionResult> ManagerReject(Guid id, [FromBody] ActionRemarkDto dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Remarks))
-            return BadRequest(new { error = "Remarks are required when rejecting." });
-
         var fullName = await GetFullNameAsync();
-        var result = await mediator.Send(new RejectByManagerCommand(id, UserId, fullName, dto.Remarks));
+        var result = await mediator.Send(new RejectByManagerCommand(id, UserId, fullName, dto.Remarks!));
         return result.IsSuccess ? Ok() : BadRequest(new { error = result.Error });
     }
 
@@ -132,11 +129,8 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
     [Authorize(Roles = UserRole.FinanceAdmin)]
     public async Task<IActionResult> FinanceReject(Guid id, [FromBody] ActionRemarkDto dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Remarks))
-            return BadRequest(new { error = "Remarks are required when rejecting." });
-
         var fullName = await GetFullNameAsync();
-        var result = await mediator.Send(new RejectByFinanceCommand(id, UserId, fullName, dto.Remarks));
+        var result = await mediator.Send(new RejectByFinanceCommand(id, UserId, fullName, dto.Remarks!));
         return result.IsSuccess ? Ok() : BadRequest(new { error = result.Error });
     }
 
