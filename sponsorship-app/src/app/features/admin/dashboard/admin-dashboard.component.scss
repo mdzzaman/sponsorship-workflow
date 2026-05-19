@@ -1,0 +1,32 @@
+.tab-card {
+  margin-top: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.empty {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+}
+
+.types-layout {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.add-type-card {
+  flex: 1;
+}
+
+.types-list-card {
+  flex: 2;
+}
+
+.type-field {
+  width: 100%;
+  margin-top: 8px;
+}

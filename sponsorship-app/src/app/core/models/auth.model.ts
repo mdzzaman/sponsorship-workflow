@@ -4,18 +4,28 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  token: string;
+  accessToken: string;
+  accessTokenExpiresAt: string;
+  refreshToken: string;
+  refreshTokenExpiresAt: string;
   userId: string;
   email: string;
   fullName: string;
-  role: string;
-  expiresAt: string;
+  roles: string[];
+}
+
+export interface TokenResponse {
+  accessToken: string;
+  accessTokenExpiresAt: string;
+  refreshToken: string;
+  refreshTokenExpiresAt: string;
 }
 
 export interface CurrentUser {
   userId: string;
   email: string;
   fullName: string;
-  role: string;
-  token: string;
+  roles: string[];
+  accessToken: string;
+  refreshToken: string;
 }

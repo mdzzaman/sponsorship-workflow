@@ -1,0 +1,58 @@
+<app-shell [navItems]="navItems">
+  <div *ngIf="request">
+    <div class="page-header">
+      <h2>{{ request.title }}</h2>
+      <button mat-button (click)="router.navigate([backRoute])">
+        <mat-icon>arrow_back</mat-icon> Back
+      </button>
+    </div>
+
+    <mat-card>
+      <mat-card-content>
+        <div class="detail-grid">
+          <div class="field"><label>Status</label><app-status-badge [status]="request.status"></app-status-badge></div>
+          <div class="field"><label>Requestor</label><span>{{ request.requestorName }}</span></div>
+          <div class="field"><label>Department</label><span>{{ request.department }}</span></div>
+          <div class="field"><label>Type</label><span>{{ request.sponsorshipTypeName }}</span></div>
+          <div class="field"><label>Event</label><span>{{ request.eventName }}</span></div>
+          <div class="field"><label>Event Date</label><span>{{ request.eventDate | date:'dd MMM yyyy' }}</span></div>
+          <div class="field"><label>Amount</label><span>MYR {{ request.requestedAmount | number:'1.2-2' }}</span></div>
+          <div class="field full-span"><label>Justification</label><span>{{ request.justification }}</span></div>
+          <div class="field full-span" *ngIf="request.expectedBenefit">
+            <label>Expected Benefit</label><span>{{ request.expectedBenefit }}</span>
+          </div>
+        </div>
+
+        <mat-divider class="section-divider"></mat-divider>
+        <h3>Workflow History</h3>
+
+        <table mat-table [dataSource]="request.workflowHistories" class="full-width" *ngIf="request.workflowHistories.length">
+          <ng-container matColumnDef="from">
+            <th mat-header-cell *matHeaderCellDef>From</th>
+            <td mat-cell *matCellDef="let h">{{ h.fromStatusName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="to">
+            <th mat-header-cell *matHeaderCellDef>To</th>
+            <td mat-cell *matCellDef="let h">{{ h.toStatusName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="actor">
+            <th mat-header-cell *matHeaderCellDef>By</th>
+            <td mat-cell *matCellDef="let h">{{ h.actorName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="remarks">
+            <th mat-header-cell *matHeaderCellDef>Remarks</th>
+            <td mat-cell *matCellDef="let h">{{ h.remarks ?? '-' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let h">{{ h.recordedAt | date:'dd MMM y HH:mm' }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="histCols"></tr>
+          <tr mat-row *matRowDef="let r; columns: histCols;"></tr>
+        </table>
+
+        <p *ngIf="!request.workflowHistories.length" class="empty-history">No workflow actions yet.</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</app-shell>

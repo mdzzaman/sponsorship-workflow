@@ -46,26 +46,15 @@ export class SponsorshipService {
     return this.http.post(`${this.base}/${id}/cancel`, {});
   }
 
-  // Manager
-  getPendingManagerApprovals() {
-    return this.http.get<SponsorshipRequestDto[]>(`${this.base}/pending-manager`);
+  // Approver (Manager + Finance — unified endpoint, state machine determines stage)
+  getPendingApprovals() {
+    return this.http.get<SponsorshipRequestDto[]>(`${this.base}/pending`);
   }
-  managerApprove(id: string, dto: ActionRemarkDto) {
-    return this.http.post(`${this.base}/${id}/manager-approve`, dto);
+  approve(id: string, dto: ActionRemarkDto) {
+    return this.http.post(`${this.base}/${id}/approve`, dto);
   }
-  managerReject(id: string, dto: ActionRemarkDto) {
-    return this.http.post(`${this.base}/${id}/manager-reject`, dto);
-  }
-
-  // Finance
-  getPendingFinanceReview() {
-    return this.http.get<SponsorshipRequestDto[]>(`${this.base}/pending-finance`);
-  }
-  financeApprove(id: string, dto: ActionRemarkDto) {
-    return this.http.post(`${this.base}/${id}/finance-approve`, dto);
-  }
-  financeReject(id: string, dto: ActionRemarkDto) {
-    return this.http.post(`${this.base}/${id}/finance-reject`, dto);
+  reject(id: string, dto: ActionRemarkDto) {
+    return this.http.post(`${this.base}/${id}/reject`, dto);
   }
 
   // Admin

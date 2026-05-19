@@ -15,81 +15,14 @@ import { SponsorshipService } from '../../../core/services/sponsorship.service';
 import { SponsorshipTypeDto } from '../../../core/models/sponsorship.model';
 
 @Component({
-    selector: 'app-request-form',
-    imports: [
-        CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule,
-        MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule,
-        MatCardModule, MatSnackBarModule, MatProgressSpinnerModule
-    ],
-    template: `
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>{{isEdit ? 'Edit' : 'New'}} Sponsorship Request</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <form [formGroup]="form" (ngSubmit)="onSave(false)" class="form-grid">
-          <mat-form-field appearance="outline">
-            <mat-label>Request Title *</mat-label>
-            <input matInput formControlName="title">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Department *</mat-label>
-            <input matInput formControlName="department">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Sponsorship Type *</mat-label>
-            <mat-select formControlName="sponsorshipTypeId">
-              <mat-option *ngFor="let t of types" [value]="t.id">{{t.name}}</mat-option>
-            </mat-select>
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Event / Organisation Name *</mat-label>
-            <input matInput formControlName="eventName">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Event Date *</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="eventDate">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Requested Amount (MYR) *</mat-label>
-            <input matInput type="number" formControlName="requestedAmount">
-            <mat-error>Required, must be > 0</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="full-span">
-            <mat-label>Purpose / Justification *</mat-label>
-            <textarea matInput rows="3" formControlName="justification"></textarea>
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="full-span">
-            <mat-label>Expected Business Benefit</mat-label>
-            <textarea matInput rows="2" formControlName="expectedBenefit"></textarea>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="full-span">
-            <mat-label>Remarks</mat-label>
-            <textarea matInput rows="2" formControlName="remarks"></textarea>
-          </mat-form-field>
-        </form>
-      </mat-card-content>
-      <mat-card-actions align="end">
-        <button mat-button type="button" (click)="goBack()">Cancel</button>
-        <button mat-stroked-button type="button" (click)="onSave(false)" [disabled]="loading">Save as Draft</button>
-        <button mat-raised-button color="primary" type="button" (click)="onSave(true)" [disabled]="loading">Save & Submit</button>
-      </mat-card-actions>
-    </mat-card>
-  `,
-    styles: [`
-    mat-card { max-width:900px; margin:0 auto; }
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
-    .full-span { grid-column:1/-1; }
-    mat-form-field { width:100%; }
-  `]
+  selector: 'app-request-form',
+  imports: [
+    CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule,
+    MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule,
+    MatCardModule, MatSnackBarModule, MatProgressSpinnerModule
+  ],
+  templateUrl: './request-form.component.html',
+  styleUrl: './request-form.component.scss'
 })
 export class RequestFormComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -120,10 +53,7 @@ export class RequestFormComponent implements OnInit {
     if (this.requestId) {
       this.isEdit = true;
       this.svc.getById(this.requestId).subscribe(r => {
-        this.form.patchValue({
-          ...r,
-          eventDate: new Date(r.eventDate)
-        } as any);
+        this.form.patchValue({ ...r, eventDate: new Date(r.eventDate) } as any);
       });
     }
   }
@@ -152,10 +82,10 @@ export class RequestFormComponent implements OnInit {
     });
   }
 
+  goBack() { this.router.navigate(['/requestor']); }
+
   private handleError() {
     this.loading = false;
     this.snack.open('An error occurred', 'Close', { duration: 3000 });
   }
-
-  goBack() { this.router.navigate(['/requestor']); }
 }

@@ -7,22 +7,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-    selector: 'app-remark-dialog',
-    imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule],
-    template: `
-    <h2 mat-dialog-title>{{data.title}}</h2>
-    <mat-dialog-content>
-      <mat-form-field appearance="outline" style="width:100%;margin-top:8px">
-        <mat-label>Remarks {{data.required ? '*' : '(optional)'}}</mat-label>
-        <textarea matInput rows="3" [formControl]="remarks"></textarea>
-        <mat-error *ngIf="remarks.hasError('required')">Remarks are required for rejection</mat-error>
-      </mat-form-field>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-raised-button color="primary" (click)="confirm()">Confirm</button>
-    </mat-dialog-actions>
-  `
+  selector: 'app-remark-dialog',
+  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  templateUrl: './remark-dialog.component.html',
+  styleUrl: './remark-dialog.component.scss'
 })
 export class RemarkDialogComponent {
   remarks: FormControl;

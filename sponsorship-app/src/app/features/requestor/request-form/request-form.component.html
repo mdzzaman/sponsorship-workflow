@@ -1,0 +1,73 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ isEdit ? 'Edit' : 'New' }} Sponsorship Request</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSave(false)" class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Request Title *</mat-label>
+        <input matInput formControlName="title">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Department *</mat-label>
+        <input matInput formControlName="department">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Sponsorship Type *</mat-label>
+        <mat-select formControlName="sponsorshipTypeId">
+          <mat-option *ngFor="let t of types" [value]="t.id">{{ t.name }}</mat-option>
+        </mat-select>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Event / Organisation Name *</mat-label>
+        <input matInput formControlName="eventName">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Event Date *</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="eventDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Requested Amount (MYR) *</mat-label>
+        <input matInput type="number" formControlName="requestedAmount">
+        <mat-error>Required, must be &gt; 0</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-span">
+        <mat-label>Purpose / Justification *</mat-label>
+        <textarea matInput rows="3" formControlName="justification"></textarea>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-span">
+        <mat-label>Expected Business Benefit</mat-label>
+        <textarea matInput rows="2" formControlName="expectedBenefit"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-span">
+        <mat-label>Remarks</mat-label>
+        <textarea matInput rows="2" formControlName="remarks"></textarea>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-button type="button" (click)="goBack()">Cancel</button>
+    <button mat-stroked-button type="button" (click)="onSave(false)" [disabled]="loading">Save as Draft</button>
+    <button mat-raised-button color="primary" type="button" (click)="onSave(true)" [disabled]="loading">
+      Save &amp; Submit
+    </button>
+  </mat-card-actions>
+</mat-card>

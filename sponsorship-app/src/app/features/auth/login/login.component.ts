@@ -11,52 +11,14 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
-    selector: 'app-login',
-    imports: [
-        CommonModule, ReactiveFormsModule,
-        MatCardModule, MatFormFieldModule, MatInputModule,
-        MatButtonModule, MatProgressSpinnerModule, MatSnackBarModule
-    ],
-    template: `
-    <div class="login-container">
-      <mat-card class="login-card">
-        <mat-card-header>
-          <mat-card-title>Sponsorship Workflow</mat-card-title>
-          <mat-card-subtitle>Sign in to your account</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Email</mat-label>
-              <input matInput formControlName="email" type="email" placeholder="you@example.com">
-              <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Password</mat-label>
-              <input matInput formControlName="password" type="password">
-              <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
-            </mat-form-field>
-            <button mat-raised-button color="primary" type="submit" [disabled]="loading" class="full-width">
-              <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
-              <span *ngIf="!loading">Sign In</span>
-            </button>
-          </form>
-        </mat-card-content>
-        <mat-card-footer>
-          <div class="test-accounts">
-            <small><strong>Test accounts:</strong> requestor&#64;test.com / manager&#64;test.com / finance&#64;test.com / admin&#64;test.com (password: Test&#64;123)</small>
-          </div>
-        </mat-card-footer>
-      </mat-card>
-    </div>
-  `,
-    styles: [`
-    .login-container { display:flex; justify-content:center; align-items:center; min-height:100vh; background:#f5f5f5; }
-    .login-card { width:400px; padding:16px; }
-    .full-width { width:100%; margin-bottom:16px; }
-    button { margin-top:8px; }
-    .test-accounts { padding:8px 16px; background:#f9f9f9; border-top:1px solid #eee; font-size:12px; color:#666; }
-  `]
+  selector: 'app-login',
+  imports: [
+    CommonModule, ReactiveFormsModule,
+    MatCardModule, MatFormFieldModule, MatInputModule,
+    MatButtonModule, MatProgressSpinnerModule, MatSnackBarModule
+  ],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
@@ -83,11 +45,14 @@ export class LoginComponent {
   }
 
   private redirectByRole() {
-    const role = this.auth.currentUser()?.role;
-    const routes: Record<string, string> = {
-      Requestor: '/requestor', Manager: '/manager',
-      FinanceAdmin: '/finance', SystemAdmin: '/admin'
-    };
-    this.router.navigate([routes[role!] ?? '/login']);
+    const roles = this.auth.currentUser()?.roles ?? [];
+    const priority: [string, string][] = [
+      ['SystemAdmin', '/admin'],
+      ['Manager', '/manager'],
+      ['FinanceAdmin', '/finance'],
+      ['Requestor', '/requestor'],
+    ];
+    const match = priority.find(([role]) => roles.includes(role));
+    this.router.navigate([match ? match[1] : '/login']);
   }
 }

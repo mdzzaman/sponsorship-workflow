@@ -33,7 +33,7 @@ export interface WorkflowHistoryDto {
   toStatusName: string;
   actorName: string;
   remarks: string | null;
-  actionedAt: string;
+  recordedAt: string;
 }
 
 export interface SponsorshipRequestDto {
