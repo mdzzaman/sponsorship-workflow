@@ -12,6 +12,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<SponsorshipRequest> SponsorshipRequests => Set<SponsorshipRequest>();
     public DbSet<WorkflowHistory> WorkflowHistories => Set<WorkflowHistory>();
     public DbSet<SponsorshipType> SponsorshipTypes => Set<SponsorshipType>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

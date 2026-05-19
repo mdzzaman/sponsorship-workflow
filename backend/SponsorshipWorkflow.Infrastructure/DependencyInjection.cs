@@ -31,7 +31,7 @@ public static class DependencyInjection
         .AddDefaultTokenProviders();
 
         services.AddScoped<ApplicationDbContextInitialiser>();
-        services.AddTransient<IJwtService, JwtService>();
+        services.AddScoped<ITokenService, TokenService>();
 
         return services;
     }
