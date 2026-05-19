@@ -11,6 +11,16 @@ using SponsorshipWorkflow.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Render.com provides a postgres:// URL; Npgsql requires key=value format
+var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
+if (connStr != null && (connStr.StartsWith("postgres://") || connStr.StartsWith("postgresql://")))
+{
+    var uri = new Uri(connStr);
+    var userInfo = uri.UserInfo.Split(':');
+    builder.Configuration["ConnectionStrings:DefaultConnection"] =
+        $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={Uri.UnescapeDataString(userInfo[1])}";
+}
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
