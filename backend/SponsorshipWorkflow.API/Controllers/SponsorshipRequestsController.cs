@@ -24,9 +24,12 @@ public class SponsorshipRequestsController(IMediator mediator) : ControllerBase
 
     [HttpGet("my")]
     [Authorize(Policy = Policies.IsRequestor)]
-    public async Task<IActionResult> GetMyRequests()
+    public async Task<IActionResult> GetMyRequests(
+        [FromQuery] int page = 1, [FromQuery] int pageSize = 10,
+        [FromQuery] string? sortBy = null, [FromQuery] bool sortDesc = true,
+        [FromQuery] string? search = null)
     {
-        var result = await mediator.Send(new GetMyRequestsQuery(UserId));
+        var result = await mediator.Send(new GetMyRequestsQuery(UserId, page, pageSize, sortBy, sortDesc, search));
         return Ok(result);
     }
 
@@ -81,9 +84,12 @@ public class SponsorshipRequestsController(IMediator mediator) : ControllerBase
 
     [HttpGet("pending")]
     [Authorize(Policy = Policies.CanApprove)]
-    public async Task<IActionResult> GetPendingApprovals()
+    public async Task<IActionResult> GetPendingApprovals(
+        [FromQuery] int page = 1, [FromQuery] int pageSize = 10,
+        [FromQuery] string? sortBy = null, [FromQuery] bool sortDesc = true,
+        [FromQuery] string? search = null)
     {
-        var result = await mediator.Send(new GetPendingApprovalsQuery(ActorRoles));
+        var result = await mediator.Send(new GetPendingApprovalsQuery(ActorRoles, page, pageSize, sortBy, sortDesc, search));
         return Ok(result);
     }
 
@@ -105,9 +111,12 @@ public class SponsorshipRequestsController(IMediator mediator) : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = Policies.IsSystemAdmin)]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+        [FromQuery] int page = 1, [FromQuery] int pageSize = 10,
+        [FromQuery] string? sortBy = null, [FromQuery] bool sortDesc = true,
+        [FromQuery] string? search = null)
     {
-        var result = await mediator.Send(new GetAllRequestsQuery());
+        var result = await mediator.Send(new GetAllRequestsQuery(page, pageSize, sortBy, sortDesc, search));
         return Ok(result);
     }
 }

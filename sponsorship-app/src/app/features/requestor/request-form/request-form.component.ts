@@ -45,8 +45,7 @@ export class RequestFormComponent implements OnInit {
   private readonly snack = inject(MatSnackBar);
 
   navItems: NavItem[] = [
-    { label: 'My Requests', route: '/requestor', icon: 'list' },
-    { label: 'New Request', route: '/requestor/new', icon: 'add_circle' }
+    { label: 'My Requests', route: '/requestor', icon: 'list' }
   ];
 
   form = this.fb.group({

@@ -3,7 +3,11 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(20, 184, 166, 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(15, 118, 110, 0.3) 0%, transparent 55%),
+    linear-gradient(135deg, #042f2e 0%, #0d4f4b 40%, #134e4a 70%, #0f766e 100%);
   padding: 24px;
 }
 
@@ -31,6 +35,7 @@
     align-items: center;
     justify-content: center;
     margin: 0 auto 20px;
+    border: 1px solid var(--clr-primary-100);
 
     mat-icon {
       font-size: 26px;

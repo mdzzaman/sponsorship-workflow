@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   ActionRemarkDto,
   CreateRequestDto,
+  PagedRequest,
+  PagedResult,
   SponsorshipRequestDto,
   SponsorshipTypeDto
 } from '../models/sponsorship.model';
@@ -27,8 +29,8 @@ export class SponsorshipService {
   }
 
   // Requestor
-  getMyRequests() {
-    return this.http.get<SponsorshipRequestDto[]>(`${this.base}/my`);
+  getMyRequests(params?: PagedRequest) {
+    return this.http.get<PagedResult<SponsorshipRequestDto>>(`${this.base}/my`, { params: toHttpParams(params) });
   }
   getById(id: string) {
     return this.http.get<SponsorshipRequestDto>(`${this.base}/${id}`);
@@ -47,8 +49,8 @@ export class SponsorshipService {
   }
 
   // Approver (Manager + Finance — unified endpoint, state machine determines stage)
-  getPendingApprovals() {
-    return this.http.get<SponsorshipRequestDto[]>(`${this.base}/pending`);
+  getPendingApprovals(params?: PagedRequest) {
+    return this.http.get<PagedResult<SponsorshipRequestDto>>(`${this.base}/pending`, { params: toHttpParams(params) });
   }
   approve(id: string, dto: ActionRemarkDto) {
     return this.http.post<void>(`${this.base}/${id}/approve`, dto);
@@ -58,7 +60,18 @@ export class SponsorshipService {
   }
 
   // Admin
-  getAllRequests() {
-    return this.http.get<SponsorshipRequestDto[]>(this.base);
+  getAllRequests(params?: PagedRequest) {
+    return this.http.get<PagedResult<SponsorshipRequestDto>>(this.base, { params: toHttpParams(params) });
   }
+}
+
+function toHttpParams(p?: PagedRequest): HttpParams {
+  let params = new HttpParams();
+  if (!p) return params;
+  if (p.page     != null) params = params.set('page',     p.page);
+  if (p.pageSize != null) params = params.set('pageSize', p.pageSize);
+  if (p.sortBy)           params = params.set('sortBy',   p.sortBy);
+  if (p.sortDesc != null) params = params.set('sortDesc', p.sortDesc);
+  if (p.search)           params = params.set('search',   p.search);
+  return params;
 }

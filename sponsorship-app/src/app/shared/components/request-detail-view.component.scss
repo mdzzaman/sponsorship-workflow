@@ -77,3 +77,24 @@ mat-card {
 }
 
 .full-width { width: 100%; }
+
+@media (max-width: 768px) {
+  mat-card { max-width: 100%; }
+
+  .detail-grid {
+    grid-template-columns: 1fr 1fr;
+    padding: 16px;
+  }
+
+  .field:nth-child(3n) { border-right: 1px solid var(--clr-border); }
+  .field:nth-child(2n) { border-right: none; }
+
+  .history-section { padding: 16px; }
+
+  .table-responsive { overflow-x: auto; }
+}
+
+@media (max-width: 480px) {
+  .detail-grid { grid-template-columns: 1fr; }
+  .field { border-right: none !important; }
+}

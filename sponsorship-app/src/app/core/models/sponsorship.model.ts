@@ -1,3 +1,19 @@
+export interface PagedResult<T> {
+  items: T[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface PagedRequest {
+  page?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDesc?: boolean;
+  search?: string;
+}
+
 export enum RequestStatus {
   Draft = 1,
   PendingManagerApproval = 2,

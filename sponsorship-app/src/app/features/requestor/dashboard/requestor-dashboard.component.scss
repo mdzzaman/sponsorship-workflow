@@ -1,3 +1,22 @@
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 0;
+}
+
+.search-field {
+  width: 280px;
+
+  mat-icon[matPrefix] {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--clr-text-muted);
+    margin-right: 4px;
+  }
+}
+
 .cell-primary {
   font-weight: 500;
   color: var(--clr-text);
@@ -11,4 +30,15 @@
 .amount {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
+}
+
+.table-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+@media (max-width: 768px) {
+  .search-field { width: 100%; }
+  .table-toolbar { padding: 12px 12px 0; }
 }

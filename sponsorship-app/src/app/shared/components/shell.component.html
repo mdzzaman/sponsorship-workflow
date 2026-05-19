@@ -1,6 +1,9 @@
 <mat-sidenav-container class="shell-container">
 
-  <mat-sidenav mode="side" opened class="sidenav">
+  <mat-sidenav #sidenav
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile()"
+    class="sidenav">
 
     <div class="sidenav-brand">
       <div class="brand-logo">
@@ -16,7 +19,7 @@
       <p class="nav-section-label">Navigation</p>
       <mat-nav-list>
         @for (item of navItems; track item.route) {
-          <a mat-list-item [routerLink]="item.route" routerLinkActive="active-link">
+          <a mat-list-item [routerLink]="item.route" routerLinkActive="active-link" (click)="onNavClick()">
             <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
             <span matListItemTitle>{{ item.label }}</span>
           </a>
@@ -36,6 +39,9 @@
 
   <mat-sidenav-content class="main-content">
     <header class="topbar">
+      <button mat-icon-button class="hamburger-btn" (click)="sidenav.toggle()" matTooltip="Toggle menu">
+        <mat-icon>menu</mat-icon>
+      </button>
       <div class="topbar-spacer"></div>
       <button mat-icon-button (click)="auth.logout()" matTooltip="Sign out">
         <mat-icon>logout</mat-icon>

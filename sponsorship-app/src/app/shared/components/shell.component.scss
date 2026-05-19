@@ -189,10 +189,31 @@ mat-nav-list {
   flex-shrink: 0;
 }
 
+.hamburger-btn {
+  color: var(--clr-text-2) !important;
+  margin-right: 4px;
+
+  &:hover {
+    background: var(--clr-surface-3) !important;
+    color: var(--clr-text) !important;
+  }
+}
+
 .topbar-spacer { flex: 1; }
 
 .page-content {
   flex: 1;
   padding: 28px 28px 40px;
   overflow: auto;
+}
+
+// ── Responsive ─────────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .page-content {
+    padding: 16px 16px 32px;
+  }
+
+  .topbar {
+    padding: 0 12px;
+  }
 }
