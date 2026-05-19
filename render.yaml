@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: sponsorship-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    branch: main
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:80
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: sponsorship-db
+          property: connectionString
+      - key: JwtSettings__Secret
+        value: SponsorshipWorkflow_SuperSecret_Key_2024_MinLength32Chars!
+      - key: JwtSettings__Issuer
+        value: SponsorshipWorkflow.API
+      - key: JwtSettings__Audience
+        value: SponsorshipWorkflow.Client
+      - key: JwtSettings__ExpiryMinutes
+        value: "5"
+      - key: AllowedOrigins__0
+        sync: false  # set after frontend URL is known
+
+  - type: web
+    name: sponsorship-frontend
+    runtime: docker
+    dockerfilePath: ./sponsorship-app/Dockerfile
+    dockerContext: ./sponsorship-app
+    plan: free
+    branch: main
+    envVars:
+      - key: API_URL
+        sync: false  # set after API URL is known
+
+databases:
+  - name: sponsorship-db
+    plan: free
+    databaseName: sponsorship_db
+    user: postgres
