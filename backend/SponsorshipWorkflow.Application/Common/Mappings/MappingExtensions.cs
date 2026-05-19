@@ -25,7 +25,7 @@ public static class MappingExtensions
         CreatedAt = r.CreatedAt,
         UpdatedAt = r.UpdatedAt,
         WorkflowHistories = r.WorkflowHistories
-            .OrderBy(h => h.ActionedAt)
+            .OrderBy(h => h.RecordedAt)
             .Select(h => h.ToResponse())
             .ToList()
     };
@@ -39,7 +39,7 @@ public static class MappingExtensions
         ToStatusName = h.ToStatus.ToString(),
         ActorName = h.ActorName,
         Remarks = h.Remarks,
-        ActionedAt = h.ActionedAt
+        RecordedAt = h.RecordedAt
     };
 
     public static SponsorshipTypeResponse ToResponse(this SponsorshipType t) => new()

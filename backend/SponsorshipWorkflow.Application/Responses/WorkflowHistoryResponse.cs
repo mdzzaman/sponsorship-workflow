@@ -11,5 +11,5 @@ public class WorkflowHistoryResponse
     public string ToStatusName { get; set; } = string.Empty;
     public string ActorName { get; set; } = string.Empty;
     public string? Remarks { get; set; }
-    public DateTime ActionedAt { get; set; }
+    public DateTime RecordedAt { get; set; }
 }
