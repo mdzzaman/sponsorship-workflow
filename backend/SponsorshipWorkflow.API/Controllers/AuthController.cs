@@ -18,7 +18,7 @@ public class AuthController(UserManager<ApplicationUser> userManager, IJwtServic
             return Unauthorized(new { error = "Invalid email or password." });
 
         var roles = await userManager.GetRolesAsync(user);
-        var token = await jwtService.GenerateTokenAsync(user.Id, user.Email!, roles);
+        var (token, expiresAt) = jwtService.GenerateToken(user.Id, user.Email!, user.FullName, roles);
 
         return Ok(new LoginResponse(
             Token: token,
@@ -26,7 +26,7 @@ public class AuthController(UserManager<ApplicationUser> userManager, IJwtServic
             Email: user.Email!,
             FullName: user.FullName,
             Roles: [.. roles],
-            ExpiresAt: DateTime.UtcNow.AddHours(8)
+            ExpiresAt: expiresAt
         ));
     }
 }

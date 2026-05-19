@@ -73,6 +73,9 @@ public class ApplicationDbContextInitialiser(
             var result = await userManager.CreateAsync(user, seedPassword);
             if (result.Succeeded)
                 await userManager.AddToRoleAsync(user, role);
+            else
+                logger.LogWarning("Failed to create seed user {Email}: {Errors}",
+                    email, string.Join(", ", result.Errors.Select(e => e.Description)));
         }
     }
 

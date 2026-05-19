@@ -1,31 +1,26 @@
 using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SponsorshipWorkflow.API.Authorization;
 using SponsorshipWorkflow.API.Contracts.SponsorshipRequests;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
-using SponsorshipWorkflow.Infrastructure.Identity;
 
 namespace SponsorshipWorkflow.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class SponsorshipRequestsController(IMediator mediator, UserManager<ApplicationUser> userManager) : ControllerBase
+public class SponsorshipRequestsController(IMediator mediator) : ControllerBase
 {
     private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)
         ?? throw new InvalidOperationException("NameIdentifier claim missing on authenticated user.");
 
     private IReadOnlyList<string> ActorRoles => [.. User.FindAll(ClaimTypes.Role).Select(c => c.Value)];
 
-    private async Task<string> GetFullNameAsync()
-    {
-        var user = await userManager.FindByIdAsync(UserId);
-        return user?.FullName ?? User.FindFirstValue(ClaimTypes.Email) ?? "Unknown";
-    }
+    private string GetFullName() =>
+        User.FindFirstValue("FullName") ?? User.FindFirstValue(ClaimTypes.Email) ?? "Unknown";
 
     [HttpGet("my")]
     [Authorize(Policy = Policies.IsRequestor)]
@@ -46,9 +41,8 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Appli
     [Authorize(Policy = Policies.IsRequestor)]
     public async Task<IActionResult> Create([FromBody] CreateSponsorshipRequest dto)
     {
-        var fullName = await GetFullNameAsync();
         var result = await mediator.Send(new CreateRequestCommand(
-            dto.Title, UserId, fullName, dto.Department,
+            dto.Title, UserId, GetFullName(), dto.Department,
             dto.SponsorshipTypeId, dto.EventName, dto.EventDate,
             dto.RequestedAmount, dto.Justification, dto.ExpectedBenefit, dto.Remarks));
 
@@ -73,8 +67,7 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Appli
     [Authorize(Policy = Policies.IsRequestor)]
     public async Task<IActionResult> Submit(Guid id)
     {
-        var fullName = await GetFullNameAsync();
-        var result = await mediator.Send(new SubmitRequestCommand(id, UserId, fullName));
+        var result = await mediator.Send(new SubmitRequestCommand(id, UserId, GetFullName()));
         return result.IsSuccess ? Ok() : BadRequest(new { error = result.Error });
     }
 
@@ -82,8 +75,7 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Appli
     [Authorize(Policy = Policies.IsRequestor)]
     public async Task<IActionResult> Cancel(Guid id)
     {
-        var fullName = await GetFullNameAsync();
-        var result = await mediator.Send(new CancelRequestCommand(id, UserId, fullName));
+        var result = await mediator.Send(new CancelRequestCommand(id, UserId, GetFullName()));
         return result.IsSuccess ? Ok() : BadRequest(new { error = result.Error });
     }
 
@@ -99,8 +91,7 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Appli
     [Authorize(Policy = Policies.CanApprove)]
     public async Task<IActionResult> Approve(Guid id, [FromBody] ActionRemarkRequest dto)
     {
-        var fullName = await GetFullNameAsync();
-        var result = await mediator.Send(new ApproveRequestCommand(id, UserId, fullName, ActorRoles, dto.Remarks));
+        var result = await mediator.Send(new ApproveRequestCommand(id, UserId, GetFullName(), ActorRoles, dto.Remarks));
         return result.IsSuccess ? Ok() : BadRequest(new { error = result.Error });
     }
 
@@ -108,8 +99,7 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Appli
     [Authorize(Policy = Policies.CanApprove)]
     public async Task<IActionResult> Reject(Guid id, [FromBody] ActionRemarkRequest dto)
     {
-        var fullName = await GetFullNameAsync();
-        var result = await mediator.Send(new RejectRequestCommand(id, UserId, fullName, ActorRoles, dto.Remarks!));
+        var result = await mediator.Send(new RejectRequestCommand(id, UserId, GetFullName(), ActorRoles, dto.Remarks));
         return result.IsSuccess ? Ok() : BadRequest(new { error = result.Error });
     }
 

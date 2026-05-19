@@ -110,8 +110,11 @@ public class SponsorshipRequest : BaseEntity
         return Result.Failure("You are not authorized to approve this request at its current status.");
     }
 
-    public Result Reject(string actorId, string actorName, IReadOnlyList<string> actorRoles, string remarks)
+    public Result Reject(string actorId, string actorName, IReadOnlyList<string> actorRoles, string? remarks)
     {
+        if (string.IsNullOrWhiteSpace(remarks))
+            return Result.Failure("A reason is required when rejecting a request.");
+
         if (Status == RequestStatus.PendingManagerApproval && actorRoles.Contains(UserRole.Manager))
             return Transition(RequestStatus.Rejected, actorId, actorName, remarks);
 

@@ -1,10 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SponsorshipWorkflow.API.Authorization;
 using SponsorshipWorkflow.API.Contracts.SponsorshipTypes;
 using SponsorshipWorkflow.Application.Features.SponsorshipTypes.Commands;
 using SponsorshipWorkflow.Application.Features.SponsorshipTypes.Queries;
-using SponsorshipWorkflow.Domain.Enums;
 
 namespace SponsorshipWorkflow.API.Controllers;
 
@@ -21,7 +21,7 @@ public class SponsorshipTypesController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = UserRole.SystemAdmin)]
+    [Authorize(Policy = Policies.IsSystemAdmin)]
     public async Task<IActionResult> Create([FromBody] CreateSponsorshipTypeRequest dto)
     {
         var result = await mediator.Send(new CreateSponsorshipTypeCommand(dto.Name));
@@ -29,7 +29,7 @@ public class SponsorshipTypesController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    [Authorize(Roles = UserRole.SystemAdmin)]
+    [Authorize(Policy = Policies.IsSystemAdmin)]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateSponsorshipTypeRequest dto)
     {
         var result = await mediator.Send(new UpdateSponsorshipTypeCommand(id, dto.Name, dto.IsActive));

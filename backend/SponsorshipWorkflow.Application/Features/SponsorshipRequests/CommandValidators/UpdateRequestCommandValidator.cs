@@ -35,5 +35,13 @@ public class UpdateRequestCommandValidator : AbstractValidator<UpdateRequestComm
             .NotEmpty().WithMessage("Justification is required.")
             .MinimumLength(20).WithMessage("Justification must be at least 20 characters.")
             .MaximumLength(2000).WithMessage("Justification must not exceed 2000 characters.");
+
+        RuleFor(x => x.ExpectedBenefit)
+            .MaximumLength(2000).WithMessage("Expected benefit must not exceed 2000 characters.")
+            .When(x => x.ExpectedBenefit is not null);
+
+        RuleFor(x => x.Remarks)
+            .MaximumLength(1000).WithMessage("Remarks must not exceed 1000 characters.")
+            .When(x => x.Remarks is not null);
     }
 }

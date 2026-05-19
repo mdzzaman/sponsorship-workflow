@@ -15,6 +15,7 @@ public class UpdateRequestCommandHandler(IApplicationDbContext db)
     {
         var entity = await db.SponsorshipRequests
             .Include(r => r.SponsorshipType)
+            .Include(r => r.WorkflowHistories)
             .FirstOrDefaultAsync(r => r.Id == request.RequestId, cancellationToken);
 
         if (entity == null) return Result<SponsorshipRequestResponse>.Failure("Request not found.");

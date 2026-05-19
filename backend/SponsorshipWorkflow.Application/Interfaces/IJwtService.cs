@@ -2,5 +2,5 @@ namespace SponsorshipWorkflow.Application.Interfaces;
 
 public interface IJwtService
 {
-    Task<string> GenerateTokenAsync(string userId, string email, IList<string> roles);
+    (string Token, DateTime ExpiresAt) GenerateToken(string userId, string email, string fullName, IList<string> roles);
 }
