@@ -1,16 +1,16 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SponsorshipWorkflow.Domain.Entities;
 using SponsorshipWorkflow.Domain.Enums;
+using SponsorshipWorkflow.Infrastructure.Identity;
 
 namespace SponsorshipWorkflow.Infrastructure.Persistence;
 
 public class ApplicationDbContextInitialiser(
     ApplicationDbContext context,
-    UserManager<IdentityUser> userManager,
+    UserManager<ApplicationUser> userManager,
     RoleManager<IdentityRole> roleManager,
     ILogger<ApplicationDbContextInitialiser> logger,
     IConfiguration configuration)
@@ -49,30 +49,30 @@ public class ApplicationDbContextInitialiser(
     {
         var users = new[]
         {
-            (Email: "requestor@test.com", FullName: "Alice Requestor", Role: UserRole.Requestor),
-            (Email: "manager@test.com",   FullName: "Bob Manager",     Role: UserRole.Manager),
-            (Email: "finance@test.com",   FullName: "Carol Finance",   Role: UserRole.FinanceAdmin),
-            (Email: "admin@test.com",     FullName: "Dave Admin",      Role: UserRole.SystemAdmin),
+            (Email: "requestor@test.com", FirstName: "Alice",  LastName: "Johnson",  Role: UserRole.Requestor),
+            (Email: "manager@test.com",   FirstName: "Bob",    LastName: "Williams", Role: UserRole.Manager),
+            (Email: "finance@test.com",   FirstName: "Carol",  LastName: "Brown",    Role: UserRole.FinanceAdmin),
+            (Email: "admin@test.com",     FirstName: "Dave",   LastName: "Taylor",   Role: UserRole.SystemAdmin),
         };
 
-        foreach (var (email, fullName, role) in users)
+        var seedPassword = configuration["Seeding:DefaultPassword"] ?? "Test@123!";
+
+        foreach (var (email, firstName, lastName, role) in users)
         {
             if (await userManager.FindByEmailAsync(email) != null) continue;
 
-            var user = new IdentityUser
+            var user = new ApplicationUser
             {
                 UserName = email,
                 Email = email,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FirstName = firstName,
+                LastName = lastName
             };
 
-            var seedPassword = configuration["Seeding:DefaultPassword"] ?? "Test@123!";
             var result = await userManager.CreateAsync(user, seedPassword);
             if (result.Succeeded)
-            {
                 await userManager.AddToRoleAsync(user, role);
-                await userManager.AddClaimAsync(user, new System.Security.Claims.Claim("FullName", fullName));
-            }
         }
     }
 

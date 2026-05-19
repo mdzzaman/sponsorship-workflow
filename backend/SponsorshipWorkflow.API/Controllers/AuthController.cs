@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SponsorshipWorkflow.API.Contracts.Auth;
 using SponsorshipWorkflow.Application.Interfaces;
+using SponsorshipWorkflow.Infrastructure.Identity;
 
 namespace SponsorshipWorkflow.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(UserManager<IdentityUser> userManager, IJwtService jwtService) : ControllerBase
+public class AuthController(UserManager<ApplicationUser> userManager, IJwtService jwtService) : ControllerBase
 {
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
@@ -17,16 +18,13 @@ public class AuthController(UserManager<IdentityUser> userManager, IJwtService j
             return Unauthorized(new { error = "Invalid email or password." });
 
         var roles = await userManager.GetRolesAsync(user);
-        var claims = await userManager.GetClaimsAsync(user);
-        var fullName = claims.FirstOrDefault(c => c.Type == "FullName")?.Value ?? user.Email!;
-
         var token = await jwtService.GenerateTokenAsync(user.Id, user.Email!, roles);
 
         return Ok(new LoginResponse(
             Token: token,
             UserId: user.Id,
             Email: user.Email!,
-            FullName: fullName,
+            FullName: user.FullName,
             Roles: [.. roles],
             ExpiresAt: DateTime.UtcNow.AddHours(8)
         ));

@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SponsorshipWorkflow.Application.Interfaces;
 using SponsorshipWorkflow.Domain.Entities;
+using SponsorshipWorkflow.Infrastructure.Identity;
 
 namespace SponsorshipWorkflow.Infrastructure.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : IdentityDbContext(options), IApplicationDbContext
+    : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
 {
     public DbSet<SponsorshipRequest> SponsorshipRequests => Set<SponsorshipRequest>();
     public DbSet<WorkflowHistory> WorkflowHistories => Set<WorkflowHistory>();

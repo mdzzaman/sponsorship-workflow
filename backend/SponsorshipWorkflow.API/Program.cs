@@ -2,8 +2,10 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SponsorshipWorkflow.API.Authorization;
 using SponsorshipWorkflow.API.Middleware;
 using SponsorshipWorkflow.Application;
+using SponsorshipWorkflow.Domain.Enums;
 using SponsorshipWorkflow.Infrastructure;
 using SponsorshipWorkflow.Infrastructure.Persistence;
 
@@ -62,7 +64,12 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.IsRequestor,  p => p.RequireRole(UserRole.Requestor));
+    options.AddPolicy(Policies.CanApprove,   p => p.RequireRole(UserRole.Manager, UserRole.FinanceAdmin));
+    options.AddPolicy(Policies.IsSystemAdmin, p => p.RequireRole(UserRole.SystemAdmin));
+});
 
 // CORS
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? [];

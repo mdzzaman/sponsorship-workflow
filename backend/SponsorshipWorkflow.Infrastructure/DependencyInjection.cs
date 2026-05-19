@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SponsorshipWorkflow.Application.Interfaces;
+using SponsorshipWorkflow.Infrastructure.Identity;
 using SponsorshipWorkflow.Infrastructure.Persistence;
 using SponsorshipWorkflow.Infrastructure.Services;
 
@@ -19,7 +20,7 @@ public static class DependencyInjection
         services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>());
 
-        services.AddIdentity<IdentityUser, IdentityRole>(options =>
+        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
             options.Password.RequireDigit = true;
             options.Password.RequiredLength = 8;
