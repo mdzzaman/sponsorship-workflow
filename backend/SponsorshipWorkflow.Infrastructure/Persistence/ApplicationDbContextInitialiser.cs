@@ -66,7 +66,24 @@ public class ApplicationDbContextInitialiser(
 
         foreach (var (email, firstName, lastName, role) in users)
         {
-            if (await userManager.FindByEmailAsync(email) != null) continue;
+            var existing = await userManager.FindByEmailAsync(email);
+
+            if (existing != null)
+            {
+                // Ensure profile fields and password are always in sync with seed config
+                existing.FirstName = firstName;
+                existing.LastName = lastName;
+                existing.EmailConfirmed = true;
+                await userManager.UpdateAsync(existing);
+
+                var resetToken = await userManager.GeneratePasswordResetTokenAsync(existing);
+                await userManager.ResetPasswordAsync(existing, resetToken, seedPassword);
+
+                if (!await userManager.IsInRoleAsync(existing, role))
+                    await userManager.AddToRoleAsync(existing, role);
+
+                continue;
+            }
 
             var user = new ApplicationUser
             {
