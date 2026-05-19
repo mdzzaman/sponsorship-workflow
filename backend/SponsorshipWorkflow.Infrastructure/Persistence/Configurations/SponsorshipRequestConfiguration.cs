@@ -29,7 +29,12 @@ public class SponsorshipRequestConfiguration : IEntityTypeConfiguration<Sponsors
             .HasForeignKey(h => h.RequestId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Property(r => r.RowVersion).IsRowVersion();
+        // xmin is a PostgreSQL system column that auto-increments on every row write.
+        // EF appends WHERE xmin = <read_value> on every UPDATE — no migration column needed.
+        builder.Property<uint>("xmin")
+            .HasColumnType("xid")
+            .ValueGeneratedOnAddOrUpdate()
+            .IsConcurrencyToken();
 
         builder.Ignore(r => r.DomainEvents);
     }
