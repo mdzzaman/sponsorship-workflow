@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '/api'
+  apiUrl: 'https://sponsorship-api-6aln.onrender.com/api'
 };

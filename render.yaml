@@ -33,11 +33,6 @@ services:
     dockerContext: ./sponsorship-app
     plan: free
     branch: main
-    dockerBuildArgs:
-      BACKEND_URL: https://sponsorship-api-6aln.onrender.com/api
-    envVars:
-      - key: API_URL
-        value: https://sponsorship-api-6aln.onrender.com
 
 databases:
   - name: sponsorship-db

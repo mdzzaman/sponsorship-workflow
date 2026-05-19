@@ -42,9 +42,9 @@ services:
     build:
       context: ./sponsorship-app
       dockerfile: Dockerfile
+      args:
+        BUILD_CONFIG: development
     container_name: sponsorship_frontend
-    environment:
-      - API_URL=http://api:80
     ports:
       - "80:80"
     depends_on:
