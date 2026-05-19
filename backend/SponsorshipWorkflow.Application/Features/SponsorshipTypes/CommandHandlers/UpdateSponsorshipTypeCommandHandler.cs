@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SponsorshipWorkflow.Domain.Common;
+using SponsorshipWorkflow.Application.Common.Mappings;
 using SponsorshipWorkflow.Application.Responses;
 using SponsorshipWorkflow.Application.Features.SponsorshipTypes.Commands;
 using SponsorshipWorkflow.Application.Interfaces;
@@ -26,6 +27,6 @@ public class UpdateSponsorshipTypeCommandHandler(IApplicationDbContext db)
             return Result<SponsorshipTypeResponse>.Failure("This sponsorship type was modified by another user. Please refresh and try again.");
         }
 
-        return Result<SponsorshipTypeResponse>.Success(new SponsorshipTypeResponse { Id = entity.Id, Name = entity.Name, IsActive = entity.IsActive });
+        return Result<SponsorshipTypeResponse>.Success(entity.ToResponse());
     }
 }

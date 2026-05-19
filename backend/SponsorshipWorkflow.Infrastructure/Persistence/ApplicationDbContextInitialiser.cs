@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SponsorshipWorkflow.Domain.Entities;
 using SponsorshipWorkflow.Domain.Enums;
@@ -11,7 +12,8 @@ public class ApplicationDbContextInitialiser(
     ApplicationDbContext context,
     UserManager<IdentityUser> userManager,
     RoleManager<IdentityRole> roleManager,
-    ILogger<ApplicationDbContextInitialiser> logger)
+    ILogger<ApplicationDbContextInitialiser> logger,
+    IConfiguration configuration)
 {
     public async Task InitialiseAsync()
     {
@@ -64,7 +66,8 @@ public class ApplicationDbContextInitialiser(
                 EmailConfirmed = true
             };
 
-            var result = await userManager.CreateAsync(user, "Test@123");
+            var seedPassword = configuration["Seeding:DefaultPassword"] ?? "Test@123!";
+            var result = await userManager.CreateAsync(user, seedPassword);
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(user, role);

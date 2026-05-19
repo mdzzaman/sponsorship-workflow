@@ -3,25 +3,14 @@ using SponsorshipWorkflow.Domain.Events;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
 
-/// <summary>
-/// Creates a WorkflowHistory record from the domain event raised by SponsorshipRequest.ChangeStatus().
-/// All workflow command handlers must call ChangeStatus() before using this factory,
-/// and must call entity.ClearDomainEvents() after adding the history record.
-/// </summary>
 internal static class WorkflowHistoryFactory
 {
     internal static WorkflowHistory FromLastEvent(SponsorshipRequest entity)
     {
-        var evt = entity.DomainEvents.OfType<RequestStatusChangedEvent>().Last();
-        return new WorkflowHistory
-        {
-            RequestId = evt.RequestId,
-            FromStatus = evt.FromStatus,
-            ToStatus = evt.ToStatus,
-            ActorId = evt.ActorId,
-            ActorName = evt.ActorName,
-            Remarks = evt.Remarks,
-            ActionedAt = evt.OccurredAt
-        };
+        var evt = entity.DomainEvents.OfType<RequestStatusChangedEvent>().LastOrDefault()
+            ?? throw new InvalidOperationException($"No RequestStatusChangedEvent found on request {entity.Id}.");
+
+        return new WorkflowHistory(evt.RequestId, evt.FromStatus, evt.ToStatus,
+            evt.ActorId, evt.ActorName, evt.Remarks, evt.OccurredAt);
     }
 }

@@ -21,7 +21,9 @@ public class JwtService(IConfiguration configuration) : IJwtService
         foreach (var role in roles)
             claims.Add(new Claim(ClaimTypes.Role, role));
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]!));
+        var secret = configuration["JwtSettings:Secret"]
+            ?? throw new InvalidOperationException("JwtSettings:Secret is not configured.");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var expiry = DateTime.UtcNow.AddHours(double.Parse(configuration["JwtSettings:ExpiryHours"] ?? "8"));
 

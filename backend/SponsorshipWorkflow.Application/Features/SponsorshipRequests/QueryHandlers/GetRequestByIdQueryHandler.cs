@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SponsorshipWorkflow.Application.Common.Mappings;
 using SponsorshipWorkflow.Application.Responses;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
 using SponsorshipWorkflow.Application.Interfaces;
@@ -13,6 +14,7 @@ public class GetRequestByIdQueryHandler(IApplicationDbContext db)
     public async Task<SponsorshipRequestResponse?> Handle(GetRequestByIdQuery request, CancellationToken cancellationToken)
     {
         var entity = await db.SponsorshipRequests
+            .AsNoTracking()
             .Include(r => r.SponsorshipType)
             .Include(r => r.WorkflowHistories)
             .FirstOrDefaultAsync(r => r.Id == request.RequestId, cancellationToken);

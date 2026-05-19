@@ -5,6 +5,6 @@ public record LoginResponse(
     string UserId,
     string Email,
     string FullName,
-    string Role,
+    IReadOnlyList<string> Roles,
     DateTime ExpiresAt
 );

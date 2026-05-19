@@ -6,21 +6,44 @@ namespace SponsorshipWorkflow.Domain.Entities;
 
 public class SponsorshipRequest : BaseEntity
 {
-    public string Title { get; set; } = string.Empty;
-    public string RequestorId { get; set; } = string.Empty;
-    public string RequestorName { get; set; } = string.Empty;
-    public string Department { get; set; } = string.Empty;
-    public Guid SponsorshipTypeId { get; set; }
-    public string EventName { get; set; } = string.Empty;
-    public DateTime EventDate { get; set; }
-    public decimal RequestedAmount { get; set; }
-    public string Justification { get; set; } = string.Empty;
-    public string? ExpectedBenefit { get; set; }
-    public string? Remarks { get; set; }
-    public RequestStatus Status { get; set; } = RequestStatus.Draft;
+    private SponsorshipRequest() { }
 
-    public SponsorshipType SponsorshipType { get; set; } = null!;
-    public ICollection<WorkflowHistory> WorkflowHistories { get; set; } = new List<WorkflowHistory>();
+    public static SponsorshipRequest Create(
+        string title, string requestorId, string requestorName, string department,
+        Guid sponsorshipTypeId, string eventName, DateTime eventDate, decimal requestedAmount,
+        string justification, string? expectedBenefit, string? remarks)
+    {
+        return new SponsorshipRequest
+        {
+            Title = title,
+            RequestorId = requestorId,
+            RequestorName = requestorName,
+            Department = department,
+            SponsorshipTypeId = sponsorshipTypeId,
+            EventName = eventName,
+            EventDate = eventDate,
+            RequestedAmount = requestedAmount,
+            Justification = justification,
+            ExpectedBenefit = expectedBenefit,
+            Remarks = remarks
+        };
+    }
+
+    public string Title { get; private set; } = string.Empty;
+    public string RequestorId { get; private set; } = string.Empty;
+    public string RequestorName { get; private set; } = string.Empty;
+    public string Department { get; private set; } = string.Empty;
+    public Guid SponsorshipTypeId { get; private set; }
+    public string EventName { get; private set; } = string.Empty;
+    public DateTime EventDate { get; private set; }
+    public decimal RequestedAmount { get; private set; }
+    public string Justification { get; private set; } = string.Empty;
+    public string? ExpectedBenefit { get; private set; }
+    public string? Remarks { get; private set; }
+    public RequestStatus Status { get; private set; } = RequestStatus.Draft;
+
+    public SponsorshipType SponsorshipType { get; private set; } = null!;
+    public ICollection<WorkflowHistory> WorkflowHistories { get; private set; } = new List<WorkflowHistory>();
 
     private readonly List<IDomainEvent> _domainEvents = new();
     public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();

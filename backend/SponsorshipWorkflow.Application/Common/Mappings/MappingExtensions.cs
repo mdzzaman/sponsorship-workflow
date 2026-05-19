@@ -1,7 +1,7 @@
 using SponsorshipWorkflow.Application.Responses;
 using SponsorshipWorkflow.Domain.Entities;
 
-namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
+namespace SponsorshipWorkflow.Application.Common.Mappings;
 
 public static class MappingExtensions
 {
@@ -40,5 +40,12 @@ public static class MappingExtensions
         ActorName = h.ActorName,
         Remarks = h.Remarks,
         ActionedAt = h.ActionedAt
+    };
+
+    public static SponsorshipTypeResponse ToResponse(this SponsorshipType t) => new()
+    {
+        Id = t.Id,
+        Name = t.Name,
+        IsActive = t.IsActive
     };
 }

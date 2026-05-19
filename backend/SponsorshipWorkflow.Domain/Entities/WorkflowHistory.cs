@@ -5,13 +5,27 @@ namespace SponsorshipWorkflow.Domain.Entities;
 
 public class WorkflowHistory : BaseEntity
 {
-    public Guid RequestId { get; set; }
-    public RequestStatus FromStatus { get; set; }
-    public RequestStatus ToStatus { get; set; }
-    public string ActorId { get; set; } = string.Empty;
-    public string ActorName { get; set; } = string.Empty;
-    public string? Remarks { get; set; }
-    public DateTime ActionedAt { get; set; } = DateTime.UtcNow;
+    private WorkflowHistory() { }
 
-    public SponsorshipRequest Request { get; set; } = null!;
+    public WorkflowHistory(Guid requestId, RequestStatus fromStatus, RequestStatus toStatus,
+        string actorId, string actorName, string? remarks, DateTime actionedAt)
+    {
+        RequestId = requestId;
+        FromStatus = fromStatus;
+        ToStatus = toStatus;
+        ActorId = actorId;
+        ActorName = actorName;
+        Remarks = remarks;
+        ActionedAt = actionedAt;
+    }
+
+    public Guid RequestId { get; private set; }
+    public RequestStatus FromStatus { get; private set; }
+    public RequestStatus ToStatus { get; private set; }
+    public string ActorId { get; private set; } = string.Empty;
+    public string ActorName { get; private set; } = string.Empty;
+    public string? Remarks { get; private set; }
+    public DateTime ActionedAt { get; private set; }
+
+    public SponsorshipRequest Request { get; private set; } = null!;
 }

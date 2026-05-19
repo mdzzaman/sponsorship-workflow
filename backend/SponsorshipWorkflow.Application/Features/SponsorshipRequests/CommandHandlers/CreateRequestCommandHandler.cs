@@ -1,8 +1,8 @@
 using MediatR;
 using SponsorshipWorkflow.Domain.Common;
 using SponsorshipWorkflow.Application.Responses;
+using SponsorshipWorkflow.Application.Common.Mappings;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
-using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
 using SponsorshipWorkflow.Application.Interfaces;
 using SponsorshipWorkflow.Domain.Entities;
 
@@ -17,20 +17,10 @@ public class CreateRequestCommandHandler(IApplicationDbContext db)
         if (typeExists == null || !typeExists.IsActive)
             return Result<SponsorshipRequestResponse>.Failure("Invalid or inactive sponsorship type.");
 
-        var entity = new SponsorshipRequest
-        {
-            Title = request.Title,
-            RequestorId = request.RequestorId,
-            RequestorName = request.RequestorName,
-            Department = request.Department,
-            SponsorshipTypeId = request.SponsorshipTypeId,
-            EventName = request.EventName,
-            EventDate = request.EventDate,
-            RequestedAmount = request.RequestedAmount,
-            Justification = request.Justification,
-            ExpectedBenefit = request.ExpectedBenefit,
-            Remarks = request.Remarks,
-        };
+        var entity = SponsorshipRequest.Create(
+            request.Title, request.RequestorId, request.RequestorName, request.Department,
+            request.SponsorshipTypeId, request.EventName, request.EventDate,
+            request.RequestedAmount, request.Justification, request.ExpectedBenefit, request.Remarks);
 
         db.SponsorshipRequests.Add(entity);
         await db.SaveChangesAsync(cancellationToken);

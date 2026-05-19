@@ -23,6 +23,12 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
                     g => g.Select(e => e.ErrorMessage).ToArray());
             await context.Response.WriteAsync(JsonSerializer.Serialize(new { errors }));
         }
+        catch (OperationCanceledException)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsync(JsonSerializer.Serialize(new { error = "The request was cancelled." }));
+        }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unhandled exception: {Message}", ex.Message);

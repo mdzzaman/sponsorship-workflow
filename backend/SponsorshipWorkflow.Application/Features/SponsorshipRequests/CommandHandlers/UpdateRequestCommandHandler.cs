@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SponsorshipWorkflow.Domain.Common;
 using SponsorshipWorkflow.Application.Responses;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
-using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
+using SponsorshipWorkflow.Application.Common.Mappings;
 using SponsorshipWorkflow.Application.Interfaces;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.CommandHandlers;

@@ -27,7 +27,7 @@ public class AuthController(UserManager<IdentityUser> userManager, IJwtService j
             UserId: user.Id,
             Email: user.Email!,
             FullName: fullName,
-            Role: roles.FirstOrDefault() ?? string.Empty,
+            Roles: [.. roles],
             ExpiresAt: DateTime.UtcNow.AddHours(8)
         ));
     }

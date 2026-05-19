@@ -36,6 +36,8 @@ public class SponsorshipRequestConfiguration : IEntityTypeConfiguration<Sponsors
             .ValueGeneratedOnAddOrUpdate()
             .IsConcurrencyToken();
 
+        builder.HasIndex(r => r.RequestorId);
+
         builder.Ignore(r => r.DomainEvents);
     }
 }
