@@ -1,6 +1,6 @@
 using MediatR;
 using SponsorshipWorkflow.Domain.Common;
-using SponsorshipWorkflow.Application.DTOs;
+using SponsorshipWorkflow.Application.Responses;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
 
@@ -16,4 +16,4 @@ public record UpdateRequestCommand(
     string Justification,
     string? ExpectedBenefit,
     string? Remarks
-) : IRequest<Result<SponsorshipRequestDto>>;
+) : IRequest<Result<SponsorshipRequestResponse>>;

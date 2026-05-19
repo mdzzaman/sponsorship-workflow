@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SponsorshipWorkflow.Application.DTOs;
+using SponsorshipWorkflow.API.Contracts.Auth;
 using SponsorshipWorkflow.Application.Interfaces;
 
 namespace SponsorshipWorkflow.API.Controllers;
@@ -22,14 +22,13 @@ public class AuthController(UserManager<IdentityUser> userManager, IJwtService j
 
         var token = await jwtService.GenerateTokenAsync(user.Id, user.Email!, roles);
 
-        return Ok(new LoginResponse
-        {
-            Token = token,
-            UserId = user.Id,
-            Email = user.Email!,
-            FullName = fullName,
-            Role = roles.FirstOrDefault() ?? string.Empty,
-            ExpiresAt = DateTime.UtcNow.AddHours(8)
-        });
+        return Ok(new LoginResponse(
+            Token: token,
+            UserId: user.Id,
+            Email: user.Email!,
+            FullName: fullName,
+            Role: roles.FirstOrDefault() ?? string.Empty,
+            ExpiresAt: DateTime.UtcNow.AddHours(8)
+        ));
     }
 }

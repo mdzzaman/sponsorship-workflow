@@ -1,8 +1,8 @@
 using SponsorshipWorkflow.Domain.Enums;
 
-namespace SponsorshipWorkflow.Application.DTOs;
+namespace SponsorshipWorkflow.Application.Responses;
 
-public class SponsorshipRequestDto
+public class SponsorshipRequestResponse
 {
     public Guid Id { get; set; }
     public string Title { get; set; } = string.Empty;
@@ -21,5 +21,5 @@ public class SponsorshipRequestDto
     public string StatusName { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-    public List<WorkflowHistoryDto> WorkflowHistories { get; set; } = new();
+    public List<WorkflowHistoryResponse> WorkflowHistories { get; set; } = new();
 }

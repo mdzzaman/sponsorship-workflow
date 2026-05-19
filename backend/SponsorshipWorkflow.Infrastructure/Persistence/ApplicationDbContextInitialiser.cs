@@ -87,7 +87,7 @@ public class ApplicationDbContextInitialiser(
         };
 
         foreach (var name in types)
-            context.SponsorshipTypes.Add(new SponsorshipType { Name = name });
+            context.SponsorshipTypes.Add(new SponsorshipType(name));
 
         await context.SaveChangesAsync();
     }

@@ -1,6 +1,6 @@
 using MediatR;
-using SponsorshipWorkflow.Application.DTOs;
+using SponsorshipWorkflow.Application.Responses;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
 
-public record GetPendingManagerApprovalsQuery : IRequest<List<SponsorshipRequestDto>>;
+public record GetPendingManagerApprovalsQuery : IRequest<List<SponsorshipRequestResponse>>;

@@ -1,6 +1,6 @@
-namespace SponsorshipWorkflow.Application.DTOs;
+namespace SponsorshipWorkflow.Application.Responses;
 
-public class SponsorshipTypeDto
+public class SponsorshipTypeResponse
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;

@@ -1,6 +1,6 @@
 using MediatR;
-using SponsorshipWorkflow.Application.DTOs;
+using SponsorshipWorkflow.Application.Responses;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
 
-public record GetMyRequestsQuery(string RequestorId) : IRequest<List<SponsorshipRequestDto>>;
+public record GetMyRequestsQuery(string RequestorId) : IRequest<List<SponsorshipRequestResponse>>;

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SponsorshipWorkflow.API.Contracts.SponsorshipTypes;
 using SponsorshipWorkflow.Application.Features.SponsorshipTypes.Commands;
 using SponsorshipWorkflow.Application.Features.SponsorshipTypes.Queries;
 using SponsorshipWorkflow.Domain.Enums;
@@ -21,7 +22,7 @@ public class SponsorshipTypesController(IMediator mediator) : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = UserRole.SystemAdmin)]
-    public async Task<IActionResult> Create([FromBody] CreateTypeDto dto)
+    public async Task<IActionResult> Create([FromBody] CreateSponsorshipTypeRequest dto)
     {
         var result = await mediator.Send(new CreateSponsorshipTypeCommand(dto.Name));
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new { error = result.Error });
@@ -29,12 +30,9 @@ public class SponsorshipTypesController(IMediator mediator) : ControllerBase
 
     [HttpPut("{id:guid}")]
     [Authorize(Roles = UserRole.SystemAdmin)]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTypeDto dto)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateSponsorshipTypeRequest dto)
     {
         var result = await mediator.Send(new UpdateSponsorshipTypeCommand(id, dto.Name, dto.IsActive));
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new { error = result.Error });
     }
 }
-
-public record CreateTypeDto(string Name);
-public record UpdateTypeDto(string Name, bool IsActive);

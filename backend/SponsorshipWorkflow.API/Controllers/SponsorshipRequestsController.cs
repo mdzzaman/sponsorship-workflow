@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SponsorshipWorkflow.API.Contracts.SponsorshipRequests;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Commands;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
 using SponsorshipWorkflow.Domain.Enums;
@@ -14,7 +15,8 @@ namespace SponsorshipWorkflow.API.Controllers;
 [Authorize]
 public class SponsorshipRequestsController(IMediator mediator, UserManager<IdentityUser> userManager) : ControllerBase
 {
-    private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+    private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)
+        ?? throw new InvalidOperationException("NameIdentifier claim missing on authenticated user.");
 
     private async Task<string> GetFullNameAsync()
     {
@@ -40,7 +42,7 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
 
     [HttpPost]
     [Authorize(Roles = UserRole.Requestor)]
-    public async Task<IActionResult> Create([FromBody] CreateRequestDto dto)
+    public async Task<IActionResult> Create([FromBody] CreateSponsorshipRequest dto)
     {
         var fullName = await GetFullNameAsync();
         var result = await mediator.Send(new CreateRequestCommand(
@@ -48,13 +50,14 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
             dto.SponsorshipTypeId, dto.EventName, dto.EventDate,
             dto.RequestedAmount, dto.Justification, dto.ExpectedBenefit, dto.Remarks));
 
-        return result.IsSuccess ? CreatedAtAction(nameof(GetById), new { id = result.Data!.Id }, result.Data)
+        return result.IsSuccess
+            ? CreatedAtAction(nameof(GetById), new { id = result.Data!.Id }, result.Data)
             : BadRequest(new { error = result.Error });
     }
 
     [HttpPut("{id:guid}")]
     [Authorize(Roles = UserRole.Requestor)]
-    public async Task<IActionResult> Update(Guid id, [FromBody] CreateRequestDto dto)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateSponsorshipRequest dto)
     {
         var result = await mediator.Send(new UpdateRequestCommand(
             id, UserId, dto.Title, dto.Department, dto.SponsorshipTypeId,
@@ -92,7 +95,7 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
 
     [HttpPost("{id:guid}/manager-approve")]
     [Authorize(Roles = UserRole.Manager)]
-    public async Task<IActionResult> ManagerApprove(Guid id, [FromBody] ActionRemarkDto dto)
+    public async Task<IActionResult> ManagerApprove(Guid id, [FromBody] ActionRemarkRequest dto)
     {
         var fullName = await GetFullNameAsync();
         var result = await mediator.Send(new ApproveByManagerCommand(id, UserId, fullName, dto.Remarks));
@@ -101,7 +104,7 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
 
     [HttpPost("{id:guid}/manager-reject")]
     [Authorize(Roles = UserRole.Manager)]
-    public async Task<IActionResult> ManagerReject(Guid id, [FromBody] ActionRemarkDto dto)
+    public async Task<IActionResult> ManagerReject(Guid id, [FromBody] ActionRemarkRequest dto)
     {
         var fullName = await GetFullNameAsync();
         var result = await mediator.Send(new RejectByManagerCommand(id, UserId, fullName, dto.Remarks!));
@@ -118,7 +121,7 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
 
     [HttpPost("{id:guid}/finance-approve")]
     [Authorize(Roles = UserRole.FinanceAdmin)]
-    public async Task<IActionResult> FinanceApprove(Guid id, [FromBody] ActionRemarkDto dto)
+    public async Task<IActionResult> FinanceApprove(Guid id, [FromBody] ActionRemarkRequest dto)
     {
         var fullName = await GetFullNameAsync();
         var result = await mediator.Send(new ApproveByFinanceCommand(id, UserId, fullName, dto.Remarks));
@@ -127,7 +130,7 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
 
     [HttpPost("{id:guid}/finance-reject")]
     [Authorize(Roles = UserRole.FinanceAdmin)]
-    public async Task<IActionResult> FinanceReject(Guid id, [FromBody] ActionRemarkDto dto)
+    public async Task<IActionResult> FinanceReject(Guid id, [FromBody] ActionRemarkRequest dto)
     {
         var fullName = await GetFullNameAsync();
         var result = await mediator.Send(new RejectByFinanceCommand(id, UserId, fullName, dto.Remarks!));
@@ -142,17 +145,3 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
         return Ok(result);
     }
 }
-
-public record CreateRequestDto(
-    string Title,
-    string Department,
-    Guid SponsorshipTypeId,
-    string EventName,
-    DateTime EventDate,
-    decimal RequestedAmount,
-    string Justification,
-    string? ExpectedBenefit,
-    string? Remarks
-);
-
-public record ActionRemarkDto(string? Remarks);

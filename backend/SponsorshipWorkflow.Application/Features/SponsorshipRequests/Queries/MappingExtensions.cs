@@ -1,11 +1,11 @@
-using SponsorshipWorkflow.Application.DTOs;
+using SponsorshipWorkflow.Application.Responses;
 using SponsorshipWorkflow.Domain.Entities;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
 
 public static class MappingExtensions
 {
-    public static SponsorshipRequestDto ToDto(this SponsorshipRequest r) => new()
+    public static SponsorshipRequestResponse ToResponse(this SponsorshipRequest r) => new()
     {
         Id = r.Id,
         Title = r.Title,
@@ -26,11 +26,11 @@ public static class MappingExtensions
         UpdatedAt = r.UpdatedAt,
         WorkflowHistories = r.WorkflowHistories
             .OrderBy(h => h.ActionedAt)
-            .Select(h => h.ToDto())
+            .Select(h => h.ToResponse())
             .ToList()
     };
 
-    public static WorkflowHistoryDto ToDto(this WorkflowHistory h) => new()
+    public static WorkflowHistoryResponse ToResponse(this WorkflowHistory h) => new()
     {
         Id = h.Id,
         FromStatus = h.FromStatus,

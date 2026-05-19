@@ -1,8 +1,8 @@
 using SponsorshipWorkflow.Domain.Enums;
 
-namespace SponsorshipWorkflow.Application.DTOs;
+namespace SponsorshipWorkflow.Application.Responses;
 
-public class WorkflowHistoryDto
+public class WorkflowHistoryResponse
 {
     public Guid Id { get; set; }
     public RequestStatus FromStatus { get; set; }
