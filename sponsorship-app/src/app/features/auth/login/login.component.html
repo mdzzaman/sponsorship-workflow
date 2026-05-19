@@ -15,12 +15,11 @@
         <mat-form-field appearance="outline">
           <mat-label>Email address</mat-label>
           <input matInput formControlName="email" type="email" autocomplete="email">
-          @if (form.get('email')?.touched) {
-            @if (form.get('email')?.hasError('required')) {
-              <mat-error>Email is required</mat-error>
-            } @else if (form.get('email')?.hasError('email')) {
-              <mat-error>Enter a valid email address</mat-error>
-            }
+          @if (form.get('email')?.touched && form.get('email')?.hasError('required')) {
+            <mat-error>Email is required</mat-error>
+          }
+          @if (form.get('email')?.touched && form.get('email')?.hasError('email')) {
+            <mat-error>Enter a valid email address</mat-error>
           }
         </mat-form-field>
 
