@@ -28,7 +28,7 @@ services:
       - JwtSettings__Secret=SponsorshipWorkflow_SuperSecret_Key_2024_MinLength32Chars!
       - JwtSettings__Issuer=SponsorshipWorkflow.API
       - JwtSettings__Audience=SponsorshipWorkflow.Client
-      - JwtSettings__ExpiryHours=8
+      - JwtSettings__ExpiryMinutes=5
       - AllowedOrigins__0=http://localhost
       - AllowedOrigins__1=http://frontend
     ports:
