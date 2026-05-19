@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +22,7 @@ import { extractApiError } from '../../../shared/utils/api-error.util';
 @Component({
   selector: 'app-manager-dashboard',
   imports: [
-    CommonModule, ReactiveFormsModule, MatTableModule, MatButtonModule, MatIconModule,
+    DecimalPipe, ReactiveFormsModule, MatTableModule, MatButtonModule, MatIconModule,
     MatCardModule, MatDialogModule, MatFormFieldModule, MatInputModule,
     MatSnackBarModule, MatTooltipModule, ShellComponent, StatusBadgeComponent
   ],

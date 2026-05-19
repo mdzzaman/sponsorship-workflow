@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { RequestStatus, StatusLabels } from '../../core/models/sponsorship.model';
 
 @Component({
   selector: 'app-status-badge',
-  imports: [CommonModule],
+  imports: [NgClass],
   templateUrl: './status-badge.component.html',
   styleUrl: './status-badge.component.scss'
 })

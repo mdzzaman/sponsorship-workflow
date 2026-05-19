@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,11 +17,12 @@ import { ShellComponent, NavItem } from '../../../shared/components/shell.compon
 import { StatusBadgeComponent } from '../../../shared/components/status-badge.component';
 import { SponsorshipService } from '../../../core/services/sponsorship.service';
 import { SponsorshipRequestDto, SponsorshipTypeDto } from '../../../core/models/sponsorship.model';
+import { extractApiError } from '../../../shared/utils/api-error.util';
 
 @Component({
   selector: 'app-admin-dashboard',
   imports: [
-    CommonModule, ReactiveFormsModule, MatTableModule, MatButtonModule, MatIconModule,
+    DatePipe, DecimalPipe, ReactiveFormsModule, MatTableModule, MatButtonModule, MatIconModule,
     MatCardModule, MatTabsModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule,
     MatSnackBarModule, MatTooltipModule, ShellComponent, StatusBadgeComponent
   ],
@@ -28,10 +30,10 @@ import { SponsorshipRequestDto, SponsorshipTypeDto } from '../../../core/models/
   styleUrl: './admin-dashboard.component.scss'
 })
 export class AdminDashboardComponent implements OnInit {
-  private svc = inject(SponsorshipService);
-  private snack = inject(MatSnackBar);
-  private fb = inject(FormBuilder);
-  router = inject(Router);
+  private readonly svc = inject(SponsorshipService);
+  private readonly snack = inject(MatSnackBar);
+  private readonly fb = inject(FormBuilder);
+  readonly router = inject(Router);
 
   requests: SponsorshipRequestDto[] = [];
   types: SponsorshipTypeDto[] = [];
@@ -48,18 +50,17 @@ export class AdminDashboardComponent implements OnInit {
     if (this.typeForm.invalid) return;
     this.svc.createType(this.typeForm.value.name!).subscribe({
       next: t => { this.types = [...this.types, t]; this.typeForm.reset(); this.snack.open('Type created', '', { duration: 2000 }); },
-      error: () => this.snack.open('Error creating type', '', { duration: 3000 })
+      error: (err: HttpErrorResponse) => this.snack.open(extractApiError(err), 'Close', { duration: 5000 })
     });
   }
 
   toggleType(t: SponsorshipTypeDto, active: boolean) {
     this.svc.updateType(t.id, t.name, active).subscribe({
       next: updated => {
-        const i = this.types.findIndex(x => x.id === t.id);
-        this.types[i] = updated;
+        this.types = this.types.map(x => x.id === t.id ? updated : x);
         this.snack.open('Updated', '', { duration: 2000 });
       },
-      error: () => this.snack.open('Error', '', { duration: 3000 })
+      error: (err: HttpErrorResponse) => this.snack.open(extractApiError(err), 'Close', { duration: 5000 })
     });
   }
 }

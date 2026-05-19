@@ -1,11 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {
-  FormBuilder, Validators, ReactiveFormsModule,
-  ValidatorFn, AbstractControl, ValidationErrors
-} from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { of, switchMap } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -15,8 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ShellComponent, NavItem } from '../../../shared/components/shell.component';
 import { SponsorshipService } from '../../../core/services/sponsorship.service';
-import { SponsorshipTypeDto } from '../../../core/models/sponsorship.model';
+import { CreateRequestDto, SponsorshipTypeDto } from '../../../core/models/sponsorship.model';
 import { applyServerValidationErrors } from '../../../shared/utils/api-error.util';
 
 function futureDateValidator(): ValidatorFn {
@@ -32,30 +30,35 @@ function futureDateValidator(): ValidatorFn {
 @Component({
   selector: 'app-request-form',
   imports: [
-    CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule,
-    MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule,
-    MatCardModule, MatSnackBarModule, MatProgressSpinnerModule
+    ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule,
+    MatDatepickerModule, MatNativeDateModule, MatButtonModule, MatCardModule,
+    MatSnackBarModule, MatProgressSpinnerModule, ShellComponent
   ],
   templateUrl: './request-form.component.html',
   styleUrl: './request-form.component.scss'
 })
 export class RequestFormComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private svc = inject(SponsorshipService);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private snack = inject(MatSnackBar);
+  private readonly fb = inject(FormBuilder);
+  private readonly svc = inject(SponsorshipService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly snack = inject(MatSnackBar);
+
+  navItems: NavItem[] = [
+    { label: 'My Requests', route: '/requestor', icon: 'list' },
+    { label: 'New Request', route: '/requestor/new', icon: 'add_circle' }
+  ];
 
   form = this.fb.group({
-    title:              ['', [Validators.required, Validators.maxLength(200)]],
-    department:         ['', [Validators.required, Validators.maxLength(100)]],
-    sponsorshipTypeId:  ['', Validators.required],
-    eventName:          ['', [Validators.required, Validators.maxLength(200)]],
-    eventDate:          [null as Date | null, [Validators.required, futureDateValidator()]],
-    requestedAmount:    [null as number | null, [Validators.required, Validators.min(0.01)]],
-    justification:      ['', [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],
-    expectedBenefit:    ['', Validators.maxLength(2000)],
-    remarks:            ['', Validators.maxLength(1000)]
+    title:             ['', [Validators.required, Validators.maxLength(200)]],
+    department:        ['', [Validators.required, Validators.maxLength(100)]],
+    sponsorshipTypeId: ['', Validators.required],
+    eventName:         ['', [Validators.required, Validators.maxLength(200)]],
+    eventDate:         [null as Date | null, [Validators.required, futureDateValidator()]],
+    requestedAmount:   [null as number | null, [Validators.required, Validators.min(0.01)]],
+    justification:     ['', [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],
+    expectedBenefit:   ['', Validators.maxLength(2000)],
+    remarks:           ['', Validators.maxLength(1000)]
   });
 
   types: SponsorshipTypeDto[] = [];
@@ -69,7 +72,17 @@ export class RequestFormComponent implements OnInit {
     if (this.requestId) {
       this.isEdit = true;
       this.svc.getById(this.requestId).subscribe(r => {
-        this.form.patchValue({ ...r, eventDate: new Date(r.eventDate) } as any);
+        this.form.patchValue({
+          title: r.title,
+          department: r.department,
+          sponsorshipTypeId: r.sponsorshipTypeId,
+          eventName: r.eventName,
+          eventDate: new Date(r.eventDate),
+          requestedAmount: r.requestedAmount,
+          justification: r.justification,
+          expectedBenefit: r.expectedBenefit,
+          remarks: r.remarks
+        });
       });
     }
   }
@@ -78,12 +91,12 @@ export class RequestFormComponent implements OnInit {
     const ctrl = this.form.get(controlName);
     if (!ctrl?.errors || !ctrl.touched) return '';
     const e = ctrl.errors;
-    if (e['required'])     return 'This field is required.';
-    if (e['minlength'])    return `Minimum ${e['minlength'].requiredLength} characters required.`;
-    if (e['maxlength'])    return `Maximum ${e['maxlength'].requiredLength} characters allowed.`;
-    if (e['min'])          return 'Amount must be greater than zero.';
-    if (e['futureDate'])   return 'Event date must be in the future.';
-    if (e['serverError'])  return e['serverError'];
+    if (e['required'])    return 'This field is required.';
+    if (e['minlength'])   return `Minimum ${e['minlength'].requiredLength} characters required.`;
+    if (e['maxlength'])   return `Maximum ${e['maxlength'].requiredLength} characters allowed.`;
+    if (e['min'])         return 'Amount must be greater than zero.';
+    if (e['futureDate'])  return 'Event date must be in the future.';
+    if (e['serverError']) return e['serverError'];
     return '';
   }
 
@@ -93,29 +106,32 @@ export class RequestFormComponent implements OnInit {
 
   onSave(submit: boolean) {
     this.clearServerErrors();
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-    this.loading = true;
-    const dto = { ...this.form.value, eventDate: this.form.value.eventDate?.toISOString() };
-    const action = this.requestId
-      ? this.svc.update(this.requestId, dto as any)
-      : this.svc.create(dto as any);
+    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
 
-    action.subscribe({
-      next: (res: any) => {
-        if (submit) {
-          this.svc.submit(res.id).subscribe({
-            next: () => { this.snack.open('Submitted!', '', { duration: 2000 }); this.router.navigate(['/requestor']); },
-            error: (err) => this.handleApiError(err)
-          });
-        } else {
-          this.snack.open('Saved as draft', '', { duration: 2000 });
-          this.router.navigate(['/requestor']);
-        }
+    this.loading = true;
+    const raw = this.form.getRawValue();
+    const dto = {
+      title: raw.title!,
+      department: raw.department!,
+      sponsorshipTypeId: raw.sponsorshipTypeId!,
+      eventName: raw.eventName!,
+      eventDate: raw.eventDate!.toISOString(),
+      requestedAmount: raw.requestedAmount!,
+      justification: raw.justification!,
+      expectedBenefit: raw.expectedBenefit || null,
+      remarks: raw.remarks || null
+    } satisfies CreateRequestDto;
+
+    const save$ = this.requestId ? this.svc.update(this.requestId, dto) : this.svc.create(dto);
+
+    save$.pipe(
+      switchMap(res => submit ? this.svc.submit(res.id) : of(void 0))
+    ).subscribe({
+      next: () => {
+        this.snack.open(submit ? 'Submitted!' : 'Saved as draft', '', { duration: 2000 });
+        this.router.navigate(['/requestor']);
       },
-      error: (err) => this.handleApiError(err)
+      error: (err: HttpErrorResponse) => this.handleApiError(err)
     });
   }
 

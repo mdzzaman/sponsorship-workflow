@@ -86,7 +86,11 @@ export class AuthService {
   }
 
   private loadUser(): CurrentUser | null {
-    const raw = localStorage.getItem(this.USER_KEY);
-    return raw ? JSON.parse(raw) : null;
+    try {
+      const raw = localStorage.getItem(this.USER_KEY);
+      return raw ? (JSON.parse(raw) as CurrentUser) : null;
+    } catch {
+      return null;
+    }
   }
 }

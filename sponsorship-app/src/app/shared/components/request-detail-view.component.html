@@ -2,7 +2,7 @@
   @if (request) {
     <div class="page-header">
       <h2>{{ request.title }}</h2>
-      <button mat-button (click)="router.navigate([backRoute])">
+      <button mat-button (click)="goBack()">
         <mat-icon>arrow_back</mat-icon> Back
       </button>
     </div>
@@ -13,13 +13,16 @@
           <div class="field"><label>Status</label><app-status-badge [status]="request.status"></app-status-badge></div>
           <div class="field"><label>Requestor</label><span>{{ request.requestorName }}</span></div>
           <div class="field"><label>Department</label><span>{{ request.department }}</span></div>
-          <div class="field"><label>Type</label><span>{{ request.sponsorshipTypeName }}</span></div>
-          <div class="field"><label>Event</label><span>{{ request.eventName }}</span></div>
+          <div class="field"><label>Sponsorship Type</label><span>{{ request.sponsorshipTypeName }}</span></div>
+          <div class="field"><label>Event / Organisation</label><span>{{ request.eventName }}</span></div>
           <div class="field"><label>Event Date</label><span>{{ request.eventDate | date:'dd MMM yyyy' }}</span></div>
-          <div class="field"><label>Amount</label><span>MYR {{ request.requestedAmount | number:'1.2-2' }}</span></div>
+          <div class="field"><label>Requested Amount</label><span>MYR {{ request.requestedAmount | number:'1.2-2' }}</span></div>
           <div class="field full-span"><label>Justification</label><span>{{ request.justification }}</span></div>
           @if (request.expectedBenefit) {
             <div class="field full-span"><label>Expected Benefit</label><span>{{ request.expectedBenefit }}</span></div>
+          }
+          @if (request.remarks) {
+            <div class="field full-span"><label>Remarks</label><span>{{ request.remarks }}</span></div>
           }
         </div>
 

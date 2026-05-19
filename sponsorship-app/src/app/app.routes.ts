@@ -16,7 +16,11 @@ export const routes: Routes = [
       { path: '', loadComponent: () => import('./features/requestor/dashboard/requestor-dashboard.component').then(m => m.RequestorDashboardComponent) },
       { path: 'new', loadComponent: () => import('./features/requestor/request-form/request-form.component').then(m => m.RequestFormComponent) },
       { path: 'edit/:id', loadComponent: () => import('./features/requestor/request-form/request-form.component').then(m => m.RequestFormComponent) },
-      { path: 'detail/:id', loadComponent: () => import('./features/requestor/request-detail/request-detail.component').then(m => m.RequestDetailComponent) },
+      {
+        path: 'detail/:id',
+        loadComponent: () => import('./shared/components/request-detail-view.component').then(m => m.RequestDetailViewComponent),
+        data: { backRoute: '/requestor', navItems: [{ label: 'My Requests', route: '/requestor', icon: 'list' }, { label: 'New Request', route: '/requestor/new', icon: 'add_circle' }] }
+      },
     ]
   },
 

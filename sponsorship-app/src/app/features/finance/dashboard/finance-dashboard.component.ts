@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
@@ -19,7 +19,7 @@ import { extractApiError } from '../../../shared/utils/api-error.util';
 @Component({
   selector: 'app-finance-dashboard',
   imports: [
-    CommonModule, MatTableModule, MatButtonModule, MatIconModule, MatCardModule,
+    DecimalPipe, MatTableModule, MatButtonModule, MatIconModule, MatCardModule,
     MatDialogModule, MatSnackBarModule, MatTooltipModule, ShellComponent, StatusBadgeComponent
   ],
   templateUrl: './finance-dashboard.component.html',

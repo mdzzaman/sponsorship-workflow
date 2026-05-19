@@ -16,14 +16,6 @@ export const StatusLabels: Record<RequestStatus, string> = {
   [RequestStatus.Cancelled]: 'Cancelled',
 };
 
-export const StatusColors: Record<RequestStatus, string> = {
-  [RequestStatus.Draft]: 'default',
-  [RequestStatus.PendingManagerApproval]: 'warn',
-  [RequestStatus.PendingFinanceReview]: 'accent',
-  [RequestStatus.Approved]: 'primary',
-  [RequestStatus.Rejected]: 'warn',
-  [RequestStatus.Cancelled]: 'default',
-};
 
 export interface WorkflowHistoryDto {
   id: string;

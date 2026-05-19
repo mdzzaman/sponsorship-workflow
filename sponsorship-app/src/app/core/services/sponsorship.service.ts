@@ -40,10 +40,10 @@ export class SponsorshipService {
     return this.http.put<SponsorshipRequestDto>(`${this.base}/${id}`, dto);
   }
   submit(id: string) {
-    return this.http.post(`${this.base}/${id}/submit`, {});
+    return this.http.post<void>(`${this.base}/${id}/submit`, {});
   }
   cancel(id: string) {
-    return this.http.post(`${this.base}/${id}/cancel`, {});
+    return this.http.post<void>(`${this.base}/${id}/cancel`, {});
   }
 
   // Approver (Manager + Finance — unified endpoint, state machine determines stage)
@@ -51,10 +51,10 @@ export class SponsorshipService {
     return this.http.get<SponsorshipRequestDto[]>(`${this.base}/pending`);
   }
   approve(id: string, dto: ActionRemarkDto) {
-    return this.http.post(`${this.base}/${id}/approve`, dto);
+    return this.http.post<void>(`${this.base}/${id}/approve`, dto);
   }
   reject(id: string, dto: ActionRemarkDto) {
-    return this.http.post(`${this.base}/${id}/reject`, dto);
+    return this.http.post<void>(`${this.base}/${id}/reject`, dto);
   }
 
   // Admin
