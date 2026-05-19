@@ -1,44 +1,60 @@
-<div class="login-container">
+<div class="login-page">
   <mat-card class="login-card">
-    <mat-card-header>
-      <mat-card-title>Sponsorship Workflow</mat-card-title>
-      <mat-card-subtitle>Sign in to your account</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
+
+    <div class="card-header">
+      <div class="logo-wrap">
+        <mat-icon>business_center</mat-icon>
+      </div>
+      <h1>SponsorFlow</h1>
+      <p>Sign in to your account</p>
+    </div>
+
+    <div class="card-body">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" type="email" placeholder="you@example.com">
-          @if (form.get('email')?.hasError('required')) {
-            <mat-error>Email is required</mat-error>
-          } @else if (form.get('email')?.hasError('email')) {
-            <mat-error>Enter a valid email address</mat-error>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email address</mat-label>
+          <input matInput formControlName="email" type="email" autocomplete="email">
+          @if (form.get('email')?.touched) {
+            @if (form.get('email')?.hasError('required')) {
+              <mat-error>Email is required</mat-error>
+            } @else if (form.get('email')?.hasError('email')) {
+              <mat-error>Enter a valid email address</mat-error>
+            }
           }
         </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
+
+        <mat-form-field appearance="outline">
           <mat-label>Password</mat-label>
-          <input matInput formControlName="password" type="password">
-          @if (form.get('password')?.hasError('required')) {
+          <input matInput formControlName="password" type="password" autocomplete="current-password">
+          @if (form.get('password')?.touched && form.get('password')?.hasError('required')) {
             <mat-error>Password is required</mat-error>
           }
         </mat-form-field>
-        <button mat-raised-button color="primary" type="submit" [disabled]="loading" class="full-width">
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="loading" class="submit-btn">
           @if (loading) {
-            <mat-spinner diameter="20"></mat-spinner>
+            <mat-spinner diameter="18"></mat-spinner>
+            Signing in…
           } @else {
-            Sign In
+            Sign in
           }
         </button>
+
       </form>
-    </mat-card-content>
-    <mat-card-footer>
-      <div class="test-accounts">
-        <small>
-          <strong>Test accounts:</strong>
-          requestor&#64;test.com / manager&#64;test.com / finance&#64;test.com / admin&#64;test.com
-          (password: Test&#64;123!)
-        </small>
+    </div>
+
+    <div class="card-footer">
+      <div class="credentials">
+        <strong>Test accounts</strong> · password: Test&#64;123!
+        <div class="cred-grid">
+          <span class="cred-item">requestor&#64;test.com</span>
+          <span class="cred-item">manager&#64;test.com</span>
+          <span class="cred-item">finance&#64;test.com</span>
+          <span class="cred-item">admin&#64;test.com</span>
+        </div>
       </div>
-    </mat-card-footer>
+    </div>
+
   </mat-card>
 </div>

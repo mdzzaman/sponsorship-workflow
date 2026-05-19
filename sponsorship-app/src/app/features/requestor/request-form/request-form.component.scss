@@ -1,19 +1,31 @@
 mat-card {
-  max-width: 900px;
+  max-width: 860px;
   margin: 0 auto;
+}
+
+mat-card-header {
+  padding: 24px 28px 0 !important;
+}
+
+.form-body {
+  padding: 20px 28px;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 16px;
+  gap: 4px 16px;
+
+  .full-span {
+    grid-column: 1 / -1;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
 }
 
-.full-span {
-  grid-column: 1 / -1;
-}
-
-mat-form-field {
-  width: 100%;
+mat-card-actions {
+  gap: 8px;
+  padding: 16px 28px !important;
 }

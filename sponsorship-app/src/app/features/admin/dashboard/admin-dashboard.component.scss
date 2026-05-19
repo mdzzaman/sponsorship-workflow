@@ -1,32 +1,29 @@
-.tab-card {
-  margin-top: 16px;
+.tab-pane {
+  padding-top: 20px;
 }
 
-.full-width {
-  width: 100%;
+.cell-primary {
+  font-weight: 500;
+  color: var(--clr-text);
 }
 
-.empty {
-  padding: 24px;
-  text-align: center;
-  color: #999;
+.cell-muted {
+  color: var(--clr-text-muted);
+  font-size: 12px;
+}
+
+.amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .types-layout {
-  display: flex;
-  gap: 16px;
-  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  align-items: start;
 }
 
-.add-type-card {
-  flex: 1;
-}
-
-.types-list-card {
-  flex: 2;
-}
-
-.type-field {
-  width: 100%;
-  margin-top: 8px;
+.add-type-body {
+  padding: 16px 20px 20px !important;
 }

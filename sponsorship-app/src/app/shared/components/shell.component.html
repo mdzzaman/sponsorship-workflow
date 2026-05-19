@@ -1,32 +1,50 @@
 <mat-sidenav-container class="shell-container">
+
   <mat-sidenav mode="side" opened class="sidenav">
-    <div class="sidenav-header">
-      <mat-icon>business_center</mat-icon>
-      <span>Sponsorship<br>Workflow</span>
+
+    <div class="sidenav-brand">
+      <div class="brand-logo">
+        <mat-icon>business_center</mat-icon>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">SponsorFlow</span>
+        <span class="brand-sub">Workflow System</span>
+      </div>
     </div>
-    <mat-nav-list>
-      @for (item of navItems; track item.route) {
-        <a mat-list-item [routerLink]="item.route" routerLinkActive="active-link">
-          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-          <span matListItemTitle>{{ item.label }}</span>
-        </a>
-      }
-    </mat-nav-list>
+
+    <nav class="sidenav-nav">
+      <p class="nav-section-label">Navigation</p>
+      <mat-nav-list>
+        @for (item of navItems; track item.route) {
+          <a mat-list-item [routerLink]="item.route" routerLinkActive="active-link">
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            <span matListItemTitle>{{ item.label }}</span>
+          </a>
+        }
+      </mat-nav-list>
+    </nav>
+
     <div class="sidenav-footer">
-      <small>{{ auth.currentUser()?.fullName }}</small><br>
-      <small class="role-badge">{{ auth.currentUser()?.roles?.join(', ') }}</small>
+      <div class="user-avatar">{{ userInitials }}</div>
+      <div class="user-meta">
+        <span class="user-name">{{ auth.currentUser()?.fullName }}</span>
+        <span class="user-role">{{ auth.currentUser()?.roles?.[0] }}</span>
+      </div>
     </div>
+
   </mat-sidenav>
 
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <span class="spacer"></span>
-      <button mat-icon-button (click)="auth.logout()" title="Sign out">
+  <mat-sidenav-content class="main-content">
+    <header class="topbar">
+      <div class="topbar-spacer"></div>
+      <button mat-icon-button (click)="auth.logout()" matTooltip="Sign out">
         <mat-icon>logout</mat-icon>
       </button>
-    </mat-toolbar>
-    <div class="content">
+    </header>
+
+    <main class="page-content">
       <ng-content></ng-content>
-    </div>
+    </main>
   </mat-sidenav-content>
+
 </mat-sidenav-container>

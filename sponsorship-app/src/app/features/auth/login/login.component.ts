@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
@@ -14,7 +15,7 @@ import { AuthService } from '../../../core/services/auth.service';
   imports: [
     ReactiveFormsModule,
     MatCardModule, MatFormFieldModule, MatInputModule,
-    MatButtonModule, MatProgressSpinnerModule, MatSnackBarModule
+    MatButtonModule, MatIconModule, MatProgressSpinnerModule, MatSnackBarModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'

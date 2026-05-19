@@ -1,13 +1,18 @@
-.full-width {
-  width: 100%;
+.cell-primary {
+  font-weight: 500;
+  color: var(--clr-text);
 }
 
-.action-btn {
+.cell-muted {
+  color: var(--clr-text-muted);
+  font-size: 12px;
+}
+
+.amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.action-approve {
   margin: 0 4px;
-}
-
-.empty {
-  padding: 24px;
-  text-align: center;
-  color: #999;
 }

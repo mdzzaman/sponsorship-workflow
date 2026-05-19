@@ -1,32 +1,74 @@
 <app-shell [navItems]="navItems">
   @if (request) {
     <div class="page-header">
-      <h2>{{ request.title }}</h2>
-      <button mat-button (click)="goBack()">
+      <div>
+        <h2>{{ request.title }}</h2>
+        <p class="page-subtitle">Sponsorship request details &amp; workflow history</p>
+      </div>
+      <button mat-stroked-button (click)="goBack()">
         <mat-icon>arrow_back</mat-icon> Back
       </button>
     </div>
 
     <mat-card>
-      <mat-card-content>
-        <div class="detail-grid">
-          <div class="field"><label>Status</label><app-status-badge [status]="request.status"></app-status-badge></div>
-          <div class="field"><label>Requestor</label><span>{{ request.requestorName }}</span></div>
-          <div class="field"><label>Department</label><span>{{ request.department }}</span></div>
-          <div class="field"><label>Sponsorship Type</label><span>{{ request.sponsorshipTypeName }}</span></div>
-          <div class="field"><label>Event / Organisation</label><span>{{ request.eventName }}</span></div>
-          <div class="field"><label>Event Date</label><span>{{ request.eventDate | date:'dd MMM yyyy' }}</span></div>
-          <div class="field"><label>Requested Amount</label><span>MYR {{ request.requestedAmount | number:'1.2-2' }}</span></div>
-          <div class="field full-span"><label>Justification</label><span>{{ request.justification }}</span></div>
-          @if (request.expectedBenefit) {
-            <div class="field full-span"><label>Expected Benefit</label><span>{{ request.expectedBenefit }}</span></div>
-          }
-          @if (request.remarks) {
-            <div class="field full-span"><label>Remarks</label><span>{{ request.remarks }}</span></div>
-          }
+      <div class="detail-grid">
+        <div class="field">
+          <label>Status</label>
+          <span><app-status-badge [status]="request.status"></app-status-badge></span>
         </div>
+        <div class="field">
+          <label>Requestor</label>
+          <span>{{ request.requestorName }}</span>
+        </div>
+        <div class="field">
+          <label>Department</label>
+          <span>{{ request.department }}</span>
+        </div>
+        <div class="field">
+          <label>Sponsorship Type</label>
+          <span>{{ request.sponsorshipTypeName }}</span>
+        </div>
+        <div class="field">
+          <label>Event / Organisation</label>
+          <span>{{ request.eventName }}</span>
+        </div>
+        <div class="field">
+          <label>Event Date</label>
+          <span>{{ request.eventDate | date:'dd MMM yyyy' }}</span>
+        </div>
+        <div class="field">
+          <label>Requested Amount</label>
+          <span>MYR {{ request.requestedAmount | number:'1.2-2' }}</span>
+        </div>
+        <div class="field">
+          <label>Submitted</label>
+          <span>{{ request.createdAt | date:'dd MMM yyyy' }}</span>
+        </div>
+        <div class="field">
+          <label>Last Updated</label>
+          <span>{{ request.updatedAt | date:'dd MMM yyyy' }}</span>
+        </div>
+        <div class="field full-span">
+          <label>Purpose / Justification</label>
+          <span>{{ request.justification }}</span>
+        </div>
+        @if (request.expectedBenefit) {
+          <div class="field full-span">
+            <label>Expected Business Benefit</label>
+            <span>{{ request.expectedBenefit }}</span>
+          </div>
+        }
+        @if (request.remarks) {
+          <div class="field full-span">
+            <label>Remarks</label>
+            <span>{{ request.remarks }}</span>
+          </div>
+        }
+      </div>
 
-        <mat-divider class="section-divider"></mat-divider>
+      <mat-divider class="section-divider"></mat-divider>
+
+      <div class="history-section">
         <h3>Workflow History</h3>
 
         @if (request.workflowHistories.length) {
@@ -45,19 +87,19 @@
             </ng-container>
             <ng-container matColumnDef="remarks">
               <th mat-header-cell *matHeaderCellDef>Remarks</th>
-              <td mat-cell *matCellDef="let h">{{ h.remarks ?? '-' }}</td>
+              <td mat-cell *matCellDef="let h" class="cell-muted">{{ h.remarks ?? '—' }}</td>
             </ng-container>
             <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef>Date</th>
-              <td mat-cell *matCellDef="let h">{{ h.recordedAt | date:'dd MMM y HH:mm' }}</td>
+              <th mat-header-cell *matHeaderCellDef>Date &amp; Time</th>
+              <td mat-cell *matCellDef="let h" class="cell-muted">{{ h.recordedAt | date:'dd MMM y, HH:mm' }}</td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="histCols"></tr>
             <tr mat-row *matRowDef="let r; columns: histCols;"></tr>
           </table>
         } @else {
-          <p class="empty-history">No workflow actions yet.</p>
+          <p class="empty-history">No workflow actions recorded yet.</p>
         }
-      </mat-card-content>
+      </div>
     </mat-card>
   }
 </app-shell>

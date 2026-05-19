@@ -1,16 +1,14 @@
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+.cell-primary {
+  font-weight: 500;
+  color: var(--clr-text);
 }
 
-.full-width {
-  width: 100%;
+.cell-muted {
+  color: var(--clr-text-muted);
+  font-size: 12px;
 }
 
-.empty {
-  padding: 24px;
-  text-align: center;
-  color: #999;
+.amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }

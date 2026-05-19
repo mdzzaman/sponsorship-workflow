@@ -1,6 +1,9 @@
 <app-shell [navItems]="navItems">
   <div class="page-header">
-    <h2>My Requests</h2>
+    <div>
+      <h2>My Requests</h2>
+      <p class="page-subtitle">Track and manage your sponsorship submissions</p>
+    </div>
     <button mat-raised-button color="primary" (click)="router.navigate(['/requestor/new'])">
       <mat-icon>add</mat-icon> New Request
     </button>
@@ -8,50 +11,70 @@
 
   <mat-card>
     <table mat-table [dataSource]="requests" class="full-width">
+
       <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef>Title</th>
-        <td mat-cell *matCellDef="let r">{{ r.title }}</td>
+        <td mat-cell *matCellDef="let r">
+          <span class="cell-primary">{{ r.title }}</span>
+        </td>
       </ng-container>
+
       <ng-container matColumnDef="eventName">
         <th mat-header-cell *matHeaderCellDef>Event</th>
         <td mat-cell *matCellDef="let r">{{ r.eventName }}</td>
       </ng-container>
+
       <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef>Amount</th>
-        <td mat-cell *matCellDef="let r">MYR {{ r.requestedAmount | number:'1.2-2' }}</td>
+        <td mat-cell *matCellDef="let r">
+          <span class="amount">MYR {{ r.requestedAmount | number:'1.2-2' }}</span>
+        </td>
       </ng-container>
+
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef>Status</th>
         <td mat-cell *matCellDef="let r"><app-status-badge [status]="r.status"></app-status-badge></td>
       </ng-container>
+
       <ng-container matColumnDef="createdAt">
         <th mat-header-cell *matHeaderCellDef>Created</th>
-        <td mat-cell *matCellDef="let r">{{ r.createdAt | date:'dd MMM y' }}</td>
+        <td mat-cell *matCellDef="let r" class="cell-muted">{{ r.createdAt | date:'dd MMM y' }}</td>
       </ng-container>
+
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let r">
-          <button mat-icon-button (click)="viewDetail(r)" matTooltip="View"><mat-icon>visibility</mat-icon></button>
-          @if (r.status === 1) {
-            <button mat-icon-button (click)="router.navigate(['/requestor/edit', r.id])" matTooltip="Edit">
-              <mat-icon>edit</mat-icon>
+          <div class="table-actions">
+            <button mat-icon-button (click)="viewDetail(r)" matTooltip="View details">
+              <mat-icon>open_in_new</mat-icon>
             </button>
-            <button mat-icon-button (click)="submit(r)" matTooltip="Submit" color="primary">
-              <mat-icon>send</mat-icon>
-            </button>
-          }
-          @if (canCancel(r)) {
-            <button mat-icon-button (click)="cancel(r)" matTooltip="Cancel" color="warn">
-              <mat-icon>cancel</mat-icon>
-            </button>
-          }
+            @if (r.status === 1) {
+              <button mat-icon-button (click)="router.navigate(['/requestor/edit', r.id])" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="submit(r)" matTooltip="Submit for approval" color="primary">
+                <mat-icon>send</mat-icon>
+              </button>
+            }
+            @if (canCancel(r)) {
+              <button mat-icon-button (click)="cancel(r)" matTooltip="Cancel request" color="warn">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            }
+          </div>
         </td>
       </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="columns"></tr>
       <tr mat-row *matRowDef="let row; columns: columns;"></tr>
     </table>
+
     @if (requests.length === 0) {
-      <p class="empty">No requests yet. Create your first one!</p>
+      <div class="empty-state">
+        <mat-icon class="empty-icon">inbox</mat-icon>
+        <h3>No requests yet</h3>
+        <p>Create your first sponsorship request to start the approval workflow.</p>
+      </div>
     }
   </mat-card>
 </app-shell>
