@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SponsorshipWorkflow.Application.Responses;
 using SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
 using SponsorshipWorkflow.Application.Interfaces;
+using SponsorshipWorkflow.Domain.Enums;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.QueryHandlers;
 
@@ -16,6 +17,13 @@ public class GetRequestByIdQueryHandler(IApplicationDbContext db)
             .Include(r => r.WorkflowHistories)
             .FirstOrDefaultAsync(r => r.Id == request.RequestId, cancellationToken);
 
-        return entity?.ToResponse();
+        if (entity == null) return null;
+
+        var canView = entity.RequestorId == request.ActorId
+            || request.ActorRoles.Contains(UserRole.SystemAdmin)
+            || request.ActorRoles.Contains(UserRole.Manager)
+            || request.ActorRoles.Contains(UserRole.FinanceAdmin);
+
+        return canView ? entity.ToResponse() : null;
     }
 }

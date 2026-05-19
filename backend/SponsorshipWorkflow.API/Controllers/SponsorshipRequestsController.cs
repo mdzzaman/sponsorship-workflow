@@ -18,6 +18,8 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
     private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)
         ?? throw new InvalidOperationException("NameIdentifier claim missing on authenticated user.");
 
+    private IReadOnlyList<string> ActorRoles => [.. User.FindAll(ClaimTypes.Role).Select(c => c.Value)];
+
     private async Task<string> GetFullNameAsync()
     {
         var user = await userManager.FindByIdAsync(UserId);
@@ -36,7 +38,7 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var result = await mediator.Send(new GetRequestByIdQuery(id));
+        var result = await mediator.Send(new GetRequestByIdQuery(id, UserId, ActorRoles));
         return result == null ? NotFound() : Ok(result);
     }
 
@@ -85,55 +87,29 @@ public class SponsorshipRequestsController(IMediator mediator, UserManager<Ident
         return result.IsSuccess ? Ok() : BadRequest(new { error = result.Error });
     }
 
-    [HttpGet("pending-manager")]
-    [Authorize(Roles = UserRole.Manager)]
-    public async Task<IActionResult> GetPendingManagerApprovals()
+    [HttpGet("pending")]
+    [Authorize(Roles = $"{UserRole.Manager},{UserRole.FinanceAdmin}")]
+    public async Task<IActionResult> GetPendingApprovals()
     {
-        var result = await mediator.Send(new GetPendingManagerApprovalsQuery());
+        var result = await mediator.Send(new GetPendingApprovalsQuery(ActorRoles));
         return Ok(result);
     }
 
-    [HttpPost("{id:guid}/manager-approve")]
-    [Authorize(Roles = UserRole.Manager)]
-    public async Task<IActionResult> ManagerApprove(Guid id, [FromBody] ActionRemarkRequest dto)
+    [HttpPost("{id:guid}/approve")]
+    [Authorize(Roles = $"{UserRole.Manager},{UserRole.FinanceAdmin}")]
+    public async Task<IActionResult> Approve(Guid id, [FromBody] ActionRemarkRequest dto)
     {
         var fullName = await GetFullNameAsync();
-        var result = await mediator.Send(new ApproveByManagerCommand(id, UserId, fullName, dto.Remarks));
+        var result = await mediator.Send(new ApproveRequestCommand(id, UserId, fullName, ActorRoles, dto.Remarks));
         return result.IsSuccess ? Ok() : BadRequest(new { error = result.Error });
     }
 
-    [HttpPost("{id:guid}/manager-reject")]
-    [Authorize(Roles = UserRole.Manager)]
-    public async Task<IActionResult> ManagerReject(Guid id, [FromBody] ActionRemarkRequest dto)
+    [HttpPost("{id:guid}/reject")]
+    [Authorize(Roles = $"{UserRole.Manager},{UserRole.FinanceAdmin}")]
+    public async Task<IActionResult> Reject(Guid id, [FromBody] ActionRemarkRequest dto)
     {
         var fullName = await GetFullNameAsync();
-        var result = await mediator.Send(new RejectByManagerCommand(id, UserId, fullName, dto.Remarks!));
-        return result.IsSuccess ? Ok() : BadRequest(new { error = result.Error });
-    }
-
-    [HttpGet("pending-finance")]
-    [Authorize(Roles = UserRole.FinanceAdmin)]
-    public async Task<IActionResult> GetPendingFinanceReview()
-    {
-        var result = await mediator.Send(new GetPendingFinanceReviewQuery());
-        return Ok(result);
-    }
-
-    [HttpPost("{id:guid}/finance-approve")]
-    [Authorize(Roles = UserRole.FinanceAdmin)]
-    public async Task<IActionResult> FinanceApprove(Guid id, [FromBody] ActionRemarkRequest dto)
-    {
-        var fullName = await GetFullNameAsync();
-        var result = await mediator.Send(new ApproveByFinanceCommand(id, UserId, fullName, dto.Remarks));
-        return result.IsSuccess ? Ok() : BadRequest(new { error = result.Error });
-    }
-
-    [HttpPost("{id:guid}/finance-reject")]
-    [Authorize(Roles = UserRole.FinanceAdmin)]
-    public async Task<IActionResult> FinanceReject(Guid id, [FromBody] ActionRemarkRequest dto)
-    {
-        var fullName = await GetFullNameAsync();
-        var result = await mediator.Send(new RejectByFinanceCommand(id, UserId, fullName, dto.Remarks!));
+        var result = await mediator.Send(new RejectRequestCommand(id, UserId, fullName, ActorRoles, dto.Remarks!));
         return result.IsSuccess ? Ok() : BadRequest(new { error = result.Error });
     }
 

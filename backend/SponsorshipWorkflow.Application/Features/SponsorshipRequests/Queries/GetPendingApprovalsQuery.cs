@@ -3,4 +3,5 @@ using SponsorshipWorkflow.Application.Responses;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.Queries;
 
-public record GetPendingManagerApprovalsQuery : IRequest<List<SponsorshipRequestResponse>>;
+public record GetPendingApprovalsQuery(IReadOnlyList<string> ActorRoles)
+    : IRequest<List<SponsorshipRequestResponse>>;

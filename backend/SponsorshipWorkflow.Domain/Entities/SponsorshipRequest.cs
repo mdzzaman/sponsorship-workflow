@@ -76,39 +76,31 @@ public class SponsorshipRequest : BaseEntity
         return Result.Success();
     }
 
-    public Result ApproveByManager(string managerId, string managerName, string? remarks)
+    public Result Approve(string actorId, string actorName, IReadOnlyList<string> actorRoles, string? remarks)
     {
-        if (Status != RequestStatus.PendingManagerApproval)
-            return Result.Failure("Request is not pending manager approval.");
+        if (Status == RequestStatus.PendingManagerApproval && actorRoles.Contains(UserRole.Manager))
+            return Transition(RequestStatus.PendingFinanceReview, actorId, actorName, remarks);
 
-        ChangeStatus(RequestStatus.PendingFinanceReview, managerId, managerName, remarks);
-        return Result.Success();
+        if (Status == RequestStatus.PendingFinanceReview && actorRoles.Contains(UserRole.FinanceAdmin))
+            return Transition(RequestStatus.Approved, actorId, actorName, remarks);
+
+        return Result.Failure("You are not authorized to approve this request at its current status.");
     }
 
-    public Result RejectByManager(string managerId, string managerName, string remarks)
+    public Result Reject(string actorId, string actorName, IReadOnlyList<string> actorRoles, string remarks)
     {
-        if (Status != RequestStatus.PendingManagerApproval)
-            return Result.Failure("Request is not pending manager approval.");
+        if (Status == RequestStatus.PendingManagerApproval && actorRoles.Contains(UserRole.Manager))
+            return Transition(RequestStatus.Rejected, actorId, actorName, remarks);
 
-        ChangeStatus(RequestStatus.Rejected, managerId, managerName, remarks);
-        return Result.Success();
+        if (Status == RequestStatus.PendingFinanceReview && actorRoles.Contains(UserRole.FinanceAdmin))
+            return Transition(RequestStatus.Rejected, actorId, actorName, remarks);
+
+        return Result.Failure("You are not authorized to reject this request at its current status.");
     }
 
-    public Result ApproveByFinance(string financeId, string financeName, string? remarks)
+    private Result Transition(RequestStatus next, string actorId, string actorName, string? remarks)
     {
-        if (Status != RequestStatus.PendingFinanceReview)
-            return Result.Failure("Request is not pending finance review.");
-
-        ChangeStatus(RequestStatus.Approved, financeId, financeName, remarks);
-        return Result.Success();
-    }
-
-    public Result RejectByFinance(string financeId, string financeName, string remarks)
-    {
-        if (Status != RequestStatus.PendingFinanceReview)
-            return Result.Failure("Request is not pending finance review.");
-
-        ChangeStatus(RequestStatus.Rejected, financeId, financeName, remarks);
+        ChangeStatus(next, actorId, actorName, remarks);
         return Result.Success();
     }
 

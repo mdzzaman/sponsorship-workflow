@@ -6,17 +6,17 @@ using SponsorshipWorkflow.Application.Interfaces;
 
 namespace SponsorshipWorkflow.Application.Features.SponsorshipRequests.CommandHandlers;
 
-public class RejectByFinanceCommandHandler(IApplicationDbContext db)
-    : IRequestHandler<RejectByFinanceCommand, Result>
+public class RejectRequestCommandHandler(IApplicationDbContext db)
+    : IRequestHandler<RejectRequestCommand, Result>
 {
-    public async Task<Result> Handle(RejectByFinanceCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(RejectRequestCommand request, CancellationToken cancellationToken)
     {
         var entity = await db.SponsorshipRequests
             .FirstOrDefaultAsync(r => r.Id == request.RequestId, cancellationToken);
 
         if (entity == null) return Result.Failure("Request not found.");
 
-        var result = entity.RejectByFinance(request.FinanceId, request.FinanceName, request.Remarks);
+        var result = entity.Reject(request.ActorId, request.ActorName, request.ActorRoles, request.Remarks);
         if (!result.IsSuccess) return result;
 
         db.WorkflowHistories.Add(WorkflowHistoryFactory.FromLastEvent(entity));
