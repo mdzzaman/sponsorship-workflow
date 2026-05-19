@@ -24,7 +24,7 @@ services:
       - key: JwtSettings__ExpiryMinutes
         value: "5"
       - key: AllowedOrigins__0
-        sync: false  # set after frontend URL is known
+        value: https://sponsorship-frontend-o0oe.onrender.com
 
   - type: web
     name: sponsorship-frontend
@@ -33,9 +33,11 @@ services:
     dockerContext: ./sponsorship-app
     plan: free
     branch: main
+    dockerBuildArgs:
+      BACKEND_URL: https://sponsorship-api-6aln.onrender.com/api
     envVars:
       - key: API_URL
-        sync: false  # set after API URL is known
+        value: https://sponsorship-api-6aln.onrender.com
 
 databases:
   - name: sponsorship-db
