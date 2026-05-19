@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +17,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge.co
 import { RemarkDialogComponent } from '../../../shared/components/remark-dialog.component';
 import { SponsorshipService } from '../../../core/services/sponsorship.service';
 import { SponsorshipRequestDto } from '../../../core/models/sponsorship.model';
+import { extractApiError } from '../../../shared/utils/api-error.util';
 
 @Component({
   selector: 'app-manager-dashboard',
@@ -38,25 +40,25 @@ export class ManagerDashboardComponent implements OnInit {
   load() { this.svc.getPendingApprovals().subscribe(r => this.requests = r); }
 
   approve(r: SponsorshipRequestDto) {
-    const ref = this.dialog.open(RemarkDialogComponent, { data: { title: 'Approve Request', required: false } });
-    ref.afterClosed().subscribe(remarks => {
-      if (remarks === undefined) return;
-      this.svc.approve(r.id, { remarks }).subscribe({
-        next: () => { this.snack.open('Approved!', '', { duration: 2000 }); this.load(); },
-        error: () => this.snack.open('Error', '', { duration: 3000 })
+    this.dialog.open(RemarkDialogComponent, { data: { title: 'Approve Request', required: false } })
+      .afterClosed().subscribe((remarks: string | undefined) => {
+        if (remarks === undefined) return;
+        this.svc.approve(r.id, { remarks }).subscribe({
+          next: () => { this.snack.open('Approved!', '', { duration: 2000 }); this.load(); },
+          error: (err: HttpErrorResponse) => this.snack.open(extractApiError(err), 'Close', { duration: 5000 })
+        });
       });
-    });
   }
 
   reject(r: SponsorshipRequestDto) {
-    const ref = this.dialog.open(RemarkDialogComponent, { data: { title: 'Reject Request', required: true } });
-    ref.afterClosed().subscribe(remarks => {
-      if (!remarks) return;
-      this.svc.reject(r.id, { remarks }).subscribe({
-        next: () => { this.snack.open('Rejected', '', { duration: 2000 }); this.load(); },
-        error: () => this.snack.open('Error', '', { duration: 3000 })
+    this.dialog.open(RemarkDialogComponent, { data: { title: 'Reject Request', required: true } })
+      .afterClosed().subscribe((remarks: string | undefined) => {
+        if (!remarks) return;
+        this.svc.reject(r.id, { remarks }).subscribe({
+          next: () => { this.snack.open('Rejected', '', { duration: 2000 }); this.load(); },
+          error: (err: HttpErrorResponse) => this.snack.open(extractApiError(err), 'Close', { duration: 5000 })
+        });
       });
-    });
   }
 
   viewDetail(r: SponsorshipRequestDto) { this.router.navigate(['/manager/detail', r.id]); }

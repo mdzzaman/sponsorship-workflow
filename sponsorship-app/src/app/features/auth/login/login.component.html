@@ -9,16 +9,23 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" type="email" placeholder="you@example.com">
-          <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
+          @if (form.get('email')?.hasError('required')) {
+            <mat-error>Email is required</mat-error>
+          }
         </mat-form-field>
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Password</mat-label>
           <input matInput formControlName="password" type="password">
-          <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
+          @if (form.get('password')?.hasError('required')) {
+            <mat-error>Password is required</mat-error>
+          }
         </mat-form-field>
         <button mat-raised-button color="primary" type="submit" [disabled]="loading" class="full-width">
-          <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
-          <span *ngIf="!loading">Sign In</span>
+          @if (loading) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            Sign In
+          }
         </button>
       </form>
     </mat-card-content>

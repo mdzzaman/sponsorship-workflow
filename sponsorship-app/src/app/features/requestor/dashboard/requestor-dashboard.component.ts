@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,6 +13,7 @@ import { ShellComponent, NavItem } from '../../../shared/components/shell.compon
 import { StatusBadgeComponent } from '../../../shared/components/status-badge.component';
 import { SponsorshipService } from '../../../core/services/sponsorship.service';
 import { SponsorshipRequestDto, RequestStatus } from '../../../core/models/sponsorship.model';
+import { extractApiError } from '../../../shared/utils/api-error.util';
 
 @Component({
   selector: 'app-requestor-dashboard',
@@ -42,18 +44,22 @@ export class RequestorDashboardComponent implements OnInit {
 
   submit(r: SponsorshipRequestDto) {
     this.svc.submit(r.id).subscribe({
-      next: () => { this.snack.open('Submitted!', '', { duration: 2000 }); this.load(); },
-      error: () => this.snack.open('Error submitting', '', { duration: 3000 })
+      next: () => { this.snack.open('Submitted successfully!', '', { duration: 2000 }); this.load(); },
+      error: (err: HttpErrorResponse) => this.showError(err)
     });
   }
 
   cancel(r: SponsorshipRequestDto) {
-    if (!confirm('Cancel this request?')) return;
+    if (!confirm('Are you sure you want to cancel this request?')) return;
     this.svc.cancel(r.id).subscribe({
-      next: () => { this.snack.open('Cancelled', '', { duration: 2000 }); this.load(); },
-      error: () => this.snack.open('Error', '', { duration: 3000 })
+      next: () => { this.snack.open('Request cancelled.', '', { duration: 2000 }); this.load(); },
+      error: (err: HttpErrorResponse) => this.showError(err)
     });
   }
 
   viewDetail(r: SponsorshipRequestDto) { this.router.navigate(['/requestor/detail', r.id]); }
+
+  private showError(err: HttpErrorResponse) {
+    this.snack.open(extractApiError(err), 'Close', { duration: 5000 });
+  }
 }

@@ -39,7 +39,9 @@
           <tr mat-header-row *matHeaderRowDef="reqCols"></tr>
           <tr mat-row *matRowDef="let row; columns: reqCols;"></tr>
         </table>
-        <p *ngIf="requests.length === 0" class="empty">No requests found.</p>
+        @if (requests.length === 0) {
+          <p class="empty">No requests found.</p>
+        }
       </mat-card>
     </mat-tab>
 

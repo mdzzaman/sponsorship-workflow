@@ -19,7 +19,21 @@ export class RemarkDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: { title: string; required: boolean },
     private dialogRef: MatDialogRef<RemarkDialogComponent>
   ) {
-    this.remarks = new FormControl('', data.required ? Validators.required : []);
+    this.remarks = new FormControl(
+      '',
+      data.required
+        ? [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]
+        : [Validators.maxLength(1000)]
+    );
+  }
+
+  getError(): string {
+    const e = this.remarks.errors;
+    if (!e) return '';
+    if (e['required'])   return 'Remarks are required for rejection.';
+    if (e['minlength'])  return `Minimum ${e['minlength'].requiredLength} characters required.`;
+    if (e['maxlength'])  return `Maximum ${e['maxlength'].requiredLength} characters allowed.`;
+    return '';
   }
 
   confirm() {

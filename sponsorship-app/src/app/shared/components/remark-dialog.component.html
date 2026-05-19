@@ -4,7 +4,10 @@
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Remarks {{ data.required ? '*' : '(optional)' }}</mat-label>
     <textarea matInput rows="3" [formControl]="remarks"></textarea>
-    <mat-error *ngIf="remarks.hasError('required')">Remarks are required for rejection</mat-error>
+    <mat-hint align="end">{{ remarks.value?.length || 0 }}/1000</mat-hint>
+    @if (remarks.touched && getError()) {
+      <mat-error>{{ getError() }}</mat-error>
+    }
   </mat-form-field>
 </mat-dialog-content>
 
