@@ -7,7 +7,7 @@ using SponsorshipWorkflow.Infrastructure.Identity;
 namespace SponsorshipWorkflow.Infrastructure.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
+    : IdentityDbContext<ApplicationUser, ApplicationRole, string>(options), IApplicationDbContext
 {
     public DbSet<SponsorshipRequest> SponsorshipRequests => Set<SponsorshipRequest>();
     public DbSet<WorkflowHistory> WorkflowHistories => Set<WorkflowHistory>();

@@ -11,7 +11,7 @@ namespace SponsorshipWorkflow.Infrastructure.Persistence;
 public class ApplicationDbContextInitialiser(
     ApplicationDbContext context,
     UserManager<ApplicationUser> userManager,
-    RoleManager<IdentityRole> roleManager,
+    RoleManager<ApplicationRole> roleManager,
     ILogger<ApplicationDbContextInitialiser> logger,
     IConfiguration configuration)
 {
@@ -37,11 +37,18 @@ public class ApplicationDbContextInitialiser(
 
     private async Task SeedRolesAsync()
     {
-        string[] roles = [UserRole.Requestor, UserRole.Manager, UserRole.FinanceAdmin, UserRole.SystemAdmin];
-        foreach (var role in roles)
+        var roles = new[]
         {
-            if (!await roleManager.RoleExistsAsync(role))
-                await roleManager.CreateAsync(new IdentityRole(role));
+            (Name: UserRole.Requestor,   Responsibility: "Submit and manage sponsorship requests"),
+            (Name: UserRole.Manager,     Responsibility: "Review and approve requests at the first level"),
+            (Name: UserRole.FinanceAdmin, Responsibility: "Review and approve requests at the finance level"),
+            (Name: UserRole.SystemAdmin, Responsibility: "Manage system configuration and users"),
+        };
+
+        foreach (var (name, responsibility) in roles)
+        {
+            if (!await roleManager.RoleExistsAsync(name))
+                await roleManager.CreateAsync(new ApplicationRole(name, responsibility));
         }
     }
 
