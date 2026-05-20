@@ -87,36 +87,34 @@ mat-nav-list {
   padding: 0 !important;
 
   a[mat-list-item] {
+    --mdc-list-list-item-label-text-color: rgba(255, 255, 255, 0.65);
+    --mdc-list-list-item-leading-icon-color: rgba(255, 255, 255, 0.45);
+    --mdc-list-list-item-hover-label-text-color: rgba(255, 255, 255, 0.9);
+    --mdc-list-list-item-hover-leading-icon-color: rgba(255, 255, 255, 0.8);
+    --mdc-list-list-item-hover-state-layer-color: transparent;
+    --mdc-list-list-item-label-text-size: 13px;
+    --mdc-list-list-item-label-text-weight: 500;
+
     height: 38px !important;
     border-radius: 6px !important;
     margin: 1px 8px !important;
-    color: rgba(255, 255, 255, 0.65) !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    transition: background var(--duration-fast) var(--ease-base),
-                color var(--duration-fast) var(--ease-base);
+    transition: background var(--duration-fast) var(--ease-base);
 
     mat-icon {
       font-size: 17px !important;
       width: 17px !important;
       height: 17px !important;
-      color: rgba(255, 255, 255, 0.45) !important;
-      transition: color var(--duration-fast) var(--ease-base);
       margin-right: 10px !important;
     }
 
     &:hover {
       background: var(--clr-sidebar-hover) !important;
-      color: rgba(255, 255, 255, 0.9) !important;
-
-      mat-icon { color: rgba(255, 255, 255, 0.8) !important; }
     }
 
     &.active-link {
+      --mdc-list-list-item-label-text-color: #fff;
+      --mdc-list-list-item-leading-icon-color: rgba(255, 255, 255, 0.9);
       background: var(--clr-sidebar-active) !important;
-      color: #fff !important;
-
-      mat-icon { color: rgba(255, 255, 255, 0.9) !important; }
     }
   }
 }

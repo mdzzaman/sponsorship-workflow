@@ -33,8 +33,10 @@
 
         <button mat-raised-button color="primary" type="submit" [disabled]="loading" class="submit-btn">
           @if (loading) {
-            <mat-spinner diameter="18"></mat-spinner>
-            Signing in…
+            <span class="btn-loading">
+              <mat-spinner diameter="18"></mat-spinner>
+              Signing in…
+            </span>
           } @else {
             Sign in
           }

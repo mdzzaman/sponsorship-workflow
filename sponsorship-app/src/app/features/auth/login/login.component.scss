@@ -88,9 +88,11 @@
     font-weight: 600 !important;
     margin-top: 4px;
     border-radius: var(--radius-md) !important;
-    display: flex;
+  }
+
+  .btn-loading {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
   }
 }
