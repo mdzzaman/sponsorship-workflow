@@ -323,13 +323,3 @@ PostgreSQL increments `xmin` on every row write at the engine level. EF Core app
 Storing plaintext refresh tokens means a single database breach gives an attacker access to all active sessions. Storing hashes means the breach is useless without the original token (which never touches the database).
 
 ---
-
-## What Was Deliberately Simplified
-
-| Concern | Production Approach |
-|---|---|
-| File attachments | Background service + object storage (S3 / Azure Blob) |
-| Email notifications | `INotificationService` + background queue (e.g. Hangfire) |
-| Unit / integration tests | xUnit + FluentAssertions + Testcontainers (PostgreSQL) |
-| Pagination | Cursor-based pagination on all list endpoints |
-| Token blacklisting | Redis for immediate access token revocation before expiry |
